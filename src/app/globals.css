@@ -1,26 +1,247 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #000000;
+  --foreground: #ededed;
+  --brand-primary: #b45309;
+  --font-poppins: var(--font-poppins), 'Poppins', system-ui, -apple-system, sans-serif;
+  --font-montserrat: var(--font-montserrat), 'Montserrat', sans-serif;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+html.light,
+.light {
+  --background: #fafafa;
+  --foreground: #18181b;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
+  background-color: var(--background);
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-poppins);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+.font-montserrat {
+  font-family: var(--font-montserrat);
+}
+
+.font-poppins {
+  font-family: var(--font-poppins);
+}
+
+/* Slower, smoother Marquee infinite loop */
+@keyframes marquee {
+  0% {
+    transform: translateX(0%);
+  }
+
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes marquee-reverse {
+  0% {
+    transform: translateX(-50%);
+  }
+
+  100% {
+    transform: translateX(0%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 68s linear infinite;
+  display: flex;
+  width: max-content;
+}
+
+.animate-marquee-reverse {
+  animation: marquee-reverse 68s linear infinite;
+  display: flex;
+  width: max-content;
+}
+
+/* Explicit Hover Pause per row */
+.marquee-row:hover .animate-marquee,
+.marquee-row:hover .animate-marquee-reverse,
+.animate-marquee:hover,
+.animate-marquee-reverse:hover {
+  animation-play-state: paused !important;
+}
+
+/* Rating Section 2-Row Running Text (Marquee) */
+@keyframes rating-marquee-left {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes rating-marquee-right {
+  0% {
+    transform: translate3d(-50%, 0, 0);
+  }
+
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+.animate-rating-marquee-left {
+  animation: rating-marquee-left 48s linear infinite;
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+
+.animate-rating-marquee-right {
+  animation: rating-marquee-right 48s linear infinite;
+  display: flex;
+  width: max-content;
+  will-change: transform;
+}
+
+/* Pause smoothly when a card is hovered */
+.animate-rating-marquee-left:has(.rating-card:hover),
+.animate-rating-marquee-right:has(.rating-card:hover),
+.animate-rating-marquee-left:hover,
+.animate-rating-marquee-right:hover {
+  animation-play-state: paused;
+}
+
+/* Glass Liquid Water Fill on Hover Animation */
+.btn-fill-effect {
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  isolation: isolate;
+  transition: color 0.35s ease, border-color 0.35s ease, transform 0.2s ease, box-shadow 0.35s ease;
+}
+
+/* Layer 1: Primary Deep Liquid Body (with Large Wave Crests) */
+.btn-fill-effect::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 108%;
+  width: 280%;
+  aspect-ratio: 1 / 1;
+  background-color: var(--btn-fill-bg, #d97706);
+  border-radius: 35% 47% 33% 49% / 46% 34% 48% 36%;
+  transform: translate(-50%, 0) rotate(0deg);
+  transition: top 0.7s ease-out;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Layer 2: Translucent Surface Ripple / Foam Wave (Large Rolling Crests) */
+.btn-fill-effect::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 108%;
+  width: 280%;
+  aspect-ratio: 1 / 1;
+  background-color: var(--btn-fill-bg, #f59e0b);
+  opacity: 0.55;
+  border-radius: 47% 34% 48% 35% / 36% 48% 34% 47%;
+  transform: translate(-50%, 0) rotate(0deg);
+  transition: top 0.75s ease-out;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* On hover: Water fills slowly like a glass with dramatic, large rolling waves */
+.btn-fill-effect:hover::before {
+  top: -135%;
+  transition: top 1.35s cubic-bezier(0.25, 0.85, 0.25, 1);
+  animation: liquidWaveSpin 4.6s linear infinite;
+}
+
+.btn-fill-effect:hover::after {
+  top: -120%;
+  transition: top 1.5s cubic-bezier(0.22, 0.9, 0.3, 1);
+  animation: liquidWaveSpinReverse 3.8s linear infinite;
+}
+
+@keyframes liquidWaveSpin {
+  0% {
+    transform: translate(-50%, 0) rotate(0deg);
+  }
+
+  100% {
+    transform: translate(-50%, 0) rotate(360deg);
+  }
+}
+
+@keyframes liquidWaveSpinReverse {
+  0% {
+    transform: translate(-50%, 0) rotate(0deg);
+  }
+
+  100% {
+    transform: translate(-50%, 0) rotate(-360deg);
+  }
+}
+
+.btn-fill-effect>* {
+  position: relative;
+  z-index: 10;
+  transition: color 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.btn-fill-effect:active {
+  transform: scale(0.97);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.98) translateY(4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Typewriter Cursor Blinking Animation */
+@keyframes cursorBlink {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0;
+  }
+}
+
+.animate-cursor-blink {
+  animation: cursorBlink 0.85s steps(1) infinite;
 }
