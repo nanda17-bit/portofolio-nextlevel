@@ -7,7 +7,6 @@ import { ProjectItem } from '@/types/portfolio';
 import { Header } from '@/components/Header';
 import { BackgroundGrid } from '@/components/BackgroundGrid';
 import { Footer } from '@/components/Footer';
-import { FloatingAdminBtn } from '@/components/FloatingAdminBtn';
 import { ProjectModal } from '@/components/ProjectModal';
 import { GithubIcon } from '@/components/SocialIcons';
 import {
@@ -430,9 +429,6 @@ export default function ProjectsPage() {
 
       {/* Footer */}
       <Footer />
-
-      {/* Floating Admin Button */}
-      <FloatingAdminBtn />
 
       {/* Detail Modal */}
       <ProjectModal

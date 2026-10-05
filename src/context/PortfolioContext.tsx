@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { PortfolioData, HeroData, ProjectItem, TechStackItem, ContactData, ContactMessage } from '@/types/portfolio';
+import { PortfolioData, HeroData, ProjectItem, TechStackItem, ContactData, ContactMessage, SongItem } from '@/types/portfolio';
 import { DEFAULT_PORTFOLIO_DATA } from '@/data/defaultData';
 
 interface PortfolioContextType {
@@ -18,6 +18,10 @@ interface PortfolioContextType {
   updateTech: (id: string, tech: Partial<TechStackItem>) => void;
   deleteTech: (id: string) => void;
   updateContact: (contact: ContactData) => void;
+  setSongs: (songs: SongItem[]) => void;
+  addSong: (song: Omit<SongItem, 'id'>) => void;
+  updateSong: (id: string, song: Partial<SongItem>) => void;
+  deleteSong: (id: string) => void;
   submitMessage: (message: Omit<ContactMessage, 'id' | 'createdAt' | 'read'>) => void;
   deleteMessage: (id: string) => void;
   markMessageRead: (id: string) => void;
@@ -58,9 +62,10 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
             title: DEFAULT_PORTFOLIO_DATA.hero.title,
           },
           contact: { ...DEFAULT_PORTFOLIO_DATA.contact, ...(parsed.contact || {}) },
-          projects: parsed.projects?.length ? parsed.projects : DEFAULT_PORTFOLIO_DATA.projects,
-          techStack: parsed.techStack?.length ? parsed.techStack : DEFAULT_PORTFOLIO_DATA.techStack,
-          messages: parsed.messages || DEFAULT_PORTFOLIO_DATA.messages,
+          projects: Array.isArray(parsed.projects) ? parsed.projects : DEFAULT_PORTFOLIO_DATA.projects,
+          techStack: Array.isArray(parsed.techStack) ? parsed.techStack : DEFAULT_PORTFOLIO_DATA.techStack,
+          messages: Array.isArray(parsed.messages) ? parsed.messages : DEFAULT_PORTFOLIO_DATA.messages,
+          songs: Array.isArray(parsed.songs) ? parsed.songs : DEFAULT_PORTFOLIO_DATA.songs,
         });
       } else {
         setData(DEFAULT_PORTFOLIO_DATA);
@@ -72,6 +77,26 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       } else {
         setTheme('dark');
       }
+
+      // Sync fresh data from shared portfolio-db.json API
+      fetch('/api/portfolio-data')
+        .then((res) => (res.ok ? res.json() : null))
+        .then((remoteData) => {
+          if (remoteData && typeof remoteData === 'object') {
+            setData((prev) => ({
+              ...DEFAULT_PORTFOLIO_DATA,
+              ...remoteData,
+              projects: Array.isArray(remoteData.projects) ? remoteData.projects : prev.projects,
+              techStack: Array.isArray(remoteData.techStack) ? remoteData.techStack : prev.techStack,
+              songs: Array.isArray(remoteData.songs) ? remoteData.songs : prev.songs,
+              messages: Array.isArray(remoteData.messages) ? remoteData.messages : prev.messages,
+            }));
+            try {
+              localStorage.setItem(STORAGE_KEY, JSON.stringify(remoteData));
+            } catch {}
+          }
+        })
+        .catch(() => {});
     } catch (e) {
       console.warn('Failed to load local storage data:', e);
     } finally {
@@ -180,6 +205,35 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     setData((prev) => ({ ...prev, contact }));
   };
 
+  const setSongs = (songs: SongItem[]) => {
+    setData((prev) => ({ ...prev, songs }));
+  };
+
+  const addSong = (songData: Omit<SongItem, 'id'>) => {
+    const newSong: SongItem = {
+      ...songData,
+      id: `s-${Date.now()}`,
+    };
+    setData((prev) => ({
+      ...prev,
+      songs: [...(prev.songs || []), newSong],
+    }));
+  };
+
+  const updateSong = (id: string, updatedFields: Partial<SongItem>) => {
+    setData((prev) => ({
+      ...prev,
+      songs: (prev.songs || []).map((s) => (s.id === id ? { ...s, ...updatedFields } : s)),
+    }));
+  };
+
+  const deleteSong = (id: string) => {
+    setData((prev) => ({
+      ...prev,
+      songs: (prev.songs || []).filter((s) => s.id !== id),
+    }));
+  };
+
   const submitMessage = (msg: Omit<ContactMessage, 'id' | 'createdAt' | 'read'>) => {
     const newMessage: ContactMessage = {
       ...msg,
@@ -191,6 +245,12 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
       ...prev,
       messages: [newMessage, ...(prev.messages || [])],
     }));
+
+    fetch('/api/portfolio-data', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ type: 'message', ...msg }),
+    }).catch(() => {});
   };
 
   const deleteMessage = (id: string) => {
@@ -234,6 +294,10 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         updateTech,
         deleteTech,
         updateContact,
+        setSongs,
+        addSong,
+        updateSong,
+        deleteSong,
         submitMessage,
         deleteMessage,
         markMessageRead,

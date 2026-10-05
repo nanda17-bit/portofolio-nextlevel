@@ -26,13 +26,15 @@ export interface ProjectItem {
   demoUrl?: string;
   githubUrl?: string;
   featured?: boolean;
+  pinned?: boolean;
   year?: string;
 }
 
 export interface TechStackItem {
   id: string;
   name: string;
-  category: 'Language' | 'Frontend' | 'Backend' | 'Database' | 'DevOps' | 'Tools';
+  category: string;
+  description?: string;
   iconKey: string;
   color?: string;
 }
@@ -64,10 +66,26 @@ export interface ContactMessage {
   read: boolean;
 }
 
+export interface SongItem {
+  id: string;
+  title: string;
+  artist: string;
+  album: string;
+  genre?: string;
+  duration?: string;
+  color?: string;
+  gradient?: string;
+  coverUrl?: string;
+  previewUrl: string;
+  spotifyUrl?: string;
+  lyrics?: string;
+}
+
 export interface PortfolioData {
   hero: HeroData;
   projects: ProjectItem[];
   techStack: TechStackItem[];
   contact: ContactData;
   messages: ContactMessage[];
+  songs: SongItem[];
 }

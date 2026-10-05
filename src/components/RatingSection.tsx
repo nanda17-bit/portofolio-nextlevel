@@ -29,7 +29,7 @@ const ROW_1_TESTIMONIALS: TestimonialItem[] = [
     rating: 5,
     date: '2 minggu lalu',
     content:
-      'Mas Iqbal berhasil mewujudkan dashboard manajemen inventori yang super kompleks jadi sangat ringan dan mudah dipakai tim operasional. Delivery tepat waktu dan kodingannya sangat rapi!',
+      'BaliqDev berhasil mewujudkan dashboard manajemen inventori yang super kompleks jadi sangat ringan dan mudah dipakai tim operasional. Delivery tepat waktu dan kodingannya sangat rapi!',
   },
   {
     id: 'rev-2',
@@ -42,7 +42,7 @@ const ROW_1_TESTIMONIALS: TestimonialItem[] = [
     rating: 5,
     date: '1 bulan lalu',
     content:
-      'Website e-commerce kami sekarang loadingnya kilat di bawah 1 detik! Sejak launching dengan desain mas Iqbal, checkout conversion kami naik 45%. Puas banget order di sini!',
+      'Website e-commerce kami sekarang loadingnya kilat di bawah 1 detik! Sejak launching dengan desain BaliqDev, checkout conversion kami naik 45%. Puas banget order di sini!',
   },
   {
     id: 'rev-3',
@@ -55,7 +55,7 @@ const ROW_1_TESTIMONIALS: TestimonialItem[] = [
     rating: 5,
     date: '3 minggu lalu',
     content:
-      'Arsitektur cloud dan API integration yang dibangun mas Iqbal sangat solid dan reliable. Menghandle puluhan ribu request harian tanpa kendala. Developer berbakat!',
+      'Arsitektur cloud dan API integration yang dibangun BaliqDev sangat solid dan reliable. Menghandle puluhan ribu request harian tanpa kendala. Developer berbakat!',
   },
   {
     id: 'rev-4',
@@ -97,7 +97,7 @@ const ROW_2_TESTIMONIALS: TestimonialItem[] = [
     rating: 5,
     date: '3 minggu lalu',
     content:
-      'Paling suka cara mas Iqbal memecahkan problem teknis. Codebase Next.js & TypeScript yang dikerjakan sangat terstruktur, mempermudah tim internal kami untuk scaling.',
+      'Paling suka cara BaliqDev memecahkan problem teknis. Codebase Next.js & TypeScript yang dikerjakan sangat terstruktur, mempermudah tim internal kami untuk scaling.',
   },
   {
     id: 'rev-7',
@@ -110,7 +110,7 @@ const ROW_2_TESTIMONIALS: TestimonialItem[] = [
     rating: 5,
     date: '1 bulan lalu',
     content:
-      'Tampilan website katalog kami jadi terlihat sangat mewah kelas internasional. Banyak klien luar negeri yang memuji kesan pertama website kami. Terima kasih mas Iqbal!',
+      'Tampilan website katalog kami jadi terlihat sangat mewah kelas internasional. Banyak klien luar negeri yang memuji kesan pertama website kami. Terima kasih BaliqDev!',
   },
   {
     id: 'rev-8',
@@ -149,24 +149,24 @@ const ROW_2_TESTIMONIALS: TestimonialItem[] = [
     rating: 5,
     date: '2 minggu lalu',
     content:
-      'Waktu event flash sale website tetap stabil dan lancar jaya tanpa down sama sekali. Sangat puas dengan hasil kerja mas Iqbal, pelayanannya ramah dan profesional!',
+      'Waktu event flash sale website tetap stabil dan lancar jaya tanpa down sama sekali. Sangat puas dengan hasil kerja BaliqDev, pelayanannya ramah dan profesional!',
   },
 ];
 
 const ReviewCard: React.FC<{ item: TestimonialItem; isDark: boolean }> = ({ item, isDark }) => {
   return (
     <div
-      className={`rating-card group relative w-[310px] sm:w-[370px] md:w-[410px] flex-shrink-0 rounded-2xl p-5 sm:p-6 transition-all duration-300 hover:scale-[1.03] cursor-default border backdrop-blur-xl ${
+      className={`rating-card group relative w-[310px] sm:w-[370px] md:w-[410px] flex-shrink-0 rounded-2xl p-5 sm:p-6 transition-colors duration-200 cursor-default border transform-gpu [backface-visibility:hidden] ${
         isDark
-          ? 'bg-[#0f0f11]/90 border-white/10 hover:border-amber-500/50 hover:bg-[#151518] shadow-2xl hover:shadow-amber-500/10'
-          : 'bg-white/95 border-zinc-200 hover:border-amber-500/60 hover:bg-white shadow-xl hover:shadow-amber-500/15'
+          ? 'bg-[#111115] border-white/10 hover:border-amber-500/50 shadow-md'
+          : 'bg-white border-zinc-200/90 hover:border-amber-500/50 shadow-sm'
       }`}
     >
       {/* Top Header: Avatar + Name + Verified Badge */}
       <div className="flex items-start justify-between gap-3 mb-3.5">
         <div className="flex items-center gap-3">
           <div
-            className={`w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-gradient-to-br ${item.avatarBg} flex items-center justify-center text-white font-bold text-xs sm:text-sm shadow-md flex-shrink-0`}
+            className={`w-10 h-10 sm:w-11 sm:h-11 rounded-full bg-gradient-to-br ${item.avatarBg} flex items-center justify-center text-white font-bold text-xs sm:text-sm shadow-sm flex-shrink-0`}
           >
             {item.initials}
           </div>
@@ -195,7 +195,7 @@ const ReviewCard: React.FC<{ item: TestimonialItem; isDark: boolean }> = ({ item
       <div className="flex items-center justify-between gap-2 mb-3">
         <div className="flex items-center gap-0.5">
           {[...Array(item.rating)].map((_, i) => (
-            <Star key={i} className="w-3.5 h-3.5 text-amber-400 fill-amber-400 drop-shadow-sm" />
+            <Star key={i} className="w-3.5 h-3.5 text-amber-400 fill-amber-400" />
           ))}
           <span className="ml-1.5 text-[11px] font-bold text-amber-400 font-mono">5.0</span>
         </div>
@@ -218,57 +218,93 @@ export const RatingSection: React.FC = () => {
   const { theme } = usePortfolio();
   const isDark = theme === 'dark';
 
-  // Duplicate items for continuous seamless loop
-  const row1Items = [...ROW_1_TESTIMONIALS, ...ROW_1_TESTIMONIALS];
-  const row2Items = [...ROW_2_TESTIMONIALS, ...ROW_2_TESTIMONIALS];
-
   return (
     <section
       id="rating"
-      className="relative z-10 w-full py-16 sm:py-24 overflow-hidden border-t border-b border-white/5 select-none"
+      className={`relative z-10 w-full max-w-full py-10 sm:py-16 md:py-24 overflow-hidden border-t border-b select-none transition-colors ${
+        isDark ? 'border-white/5' : 'border-zinc-200'
+      }`}
     >
-      {/* Background ambient radial glow */}
+      {/* Background ambient radial glow without expensive blur filter */}
       <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-        <div className="w-[600px] sm:w-[900px] h-[400px] sm:h-[600px] rounded-full bg-amber-500/5 blur-[160px]" />
+        <div
+          className="w-[600px] sm:w-[900px] h-[400px] sm:h-[600px] rounded-full pointer-events-none"
+          style={{
+            background: isDark
+              ? 'radial-gradient(ellipse at center, rgba(245, 158, 11, 0.05) 0%, transparent 70%)'
+              : 'radial-gradient(ellipse at center, rgba(245, 158, 11, 0.08) 0%, transparent 70%)',
+          }}
+        />
       </div>
 
       {/* Header Info */}
-      <div className="relative z-10 max-w-5xl mx-auto px-4 text-center mb-10 sm:mb-14">
-        <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-white drop-shadow-md">
-          Rating <span className="text-amber-500">Customer</span>
+      <div className="relative z-10 max-w-5xl mx-auto px-4 text-center mb-6 sm:mb-12">
+        <h2 className="text-2xl sm:text-4xl md:text-5xl font-extrabold tracking-tight drop-shadow-md">
+          <span className="text-amber-500">Rating</span>{' '}
+          <span className={isDark ? 'text-white' : 'text-zinc-900'}>Customer</span>
         </h2>
-        <p className="mt-3 max-w-2xl mx-auto text-xs sm:text-base text-zinc-400 leading-relaxed">
+        <p
+          className={`mt-3 max-w-2xl mx-auto text-xs sm:text-base leading-relaxed ${
+            isDark ? 'text-zinc-400' : 'text-zinc-600'
+          }`}
+        >
           Cerita nyata dari para klien, founder, dan partner bisnis yang telah mempercayakan pembuatan
-          website, aplikasi full-stack, serta sistem digital kepada saya.
+          website, aplikasi full-stack, serta sistem digital kepada BaliqDev.
         </p>
       </div>
 
       {/* Dual-Row Running Text Container - Tilted / Rotated slightly upwards as requested */}
-      <div className="relative w-full overflow-hidden py-4">
-        {/* Soft edge gradient fade masks so running cards emerge and dissolve smoothly */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-16 sm:w-40 bg-gradient-to-r from-black via-black/80 to-transparent z-20" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-16 sm:w-40 bg-gradient-to-l from-black via-black/80 to-transparent z-20" />
+      <div className="relative w-full max-w-full overflow-hidden py-4">
+        {/* Soft edge gradient fade masks matching current theme background */}
+        <div
+          className={`pointer-events-none absolute inset-y-0 left-0 w-16 sm:w-40 z-20 bg-gradient-to-r transition-colors ${
+            isDark
+              ? 'from-black via-black/80 to-transparent'
+              : 'from-[#fafafa] via-[#fafafa]/85 to-transparent'
+          }`}
+        />
+        <div
+          className={`pointer-events-none absolute inset-y-0 right-0 w-16 sm:w-40 z-20 bg-gradient-to-l transition-colors ${
+            isDark
+              ? 'from-black via-black/80 to-transparent'
+              : 'from-[#fafafa] via-[#fafafa]/85 to-transparent'
+          }`}
+        />
 
         {/* Tilted Stage Wrapper: slightly angled upwards (-2.2deg) */}
         <div
-          className="w-[110%] -ml-[5%] flex flex-col gap-4 sm:gap-6 will-change-transform"
+          className="w-full sm:w-[110%] sm:-ml-[5%] flex flex-col gap-4 sm:gap-6 transform-gpu [backface-visibility:hidden]"
           style={{ transform: 'rotate(-2.2deg)' }}
         >
           {/* Row 1: Running to the RIGHT */}
-          <div className="overflow-hidden w-full py-1">
-            <div className="animate-rating-marquee-right flex gap-4 sm:gap-6">
-              {row1Items.map((item, idx) => (
-                <ReviewCard key={`r1-${item.id}-${idx}`} item={item} isDark={isDark} />
-              ))}
+          <div className="rating-marquee-track overflow-hidden w-full py-1">
+            <div className="animate-rating-marquee-right flex">
+              <div className="flex gap-4 sm:gap-6 pr-4 sm:pr-6 flex-shrink-0">
+                {ROW_1_TESTIMONIALS.map((item, idx) => (
+                  <ReviewCard key={`r1-a-${item.id}-${idx}`} item={item} isDark={isDark} />
+                ))}
+              </div>
+              <div className="flex gap-4 sm:gap-6 pr-4 sm:pr-6 flex-shrink-0">
+                {ROW_1_TESTIMONIALS.map((item, idx) => (
+                  <ReviewCard key={`r1-b-${item.id}-${idx}`} item={item} isDark={isDark} />
+                ))}
+              </div>
             </div>
           </div>
 
           {/* Row 2: Running to the LEFT */}
-          <div className="overflow-hidden w-full py-1">
-            <div className="animate-rating-marquee-left flex gap-4 sm:gap-6">
-              {row2Items.map((item, idx) => (
-                <ReviewCard key={`r2-${item.id}-${idx}`} item={item} isDark={isDark} />
-              ))}
+          <div className="rating-marquee-track overflow-hidden w-full py-1">
+            <div className="animate-rating-marquee-left flex">
+              <div className="flex gap-4 sm:gap-6 pr-4 sm:pr-6 flex-shrink-0">
+                {ROW_2_TESTIMONIALS.map((item, idx) => (
+                  <ReviewCard key={`r2-a-${item.id}-${idx}`} item={item} isDark={isDark} />
+                ))}
+              </div>
+              <div className="flex gap-4 sm:gap-6 pr-4 sm:pr-6 flex-shrink-0">
+                {ROW_2_TESTIMONIALS.map((item, idx) => (
+                  <ReviewCard key={`r2-b-${item.id}-${idx}`} item={item} isDark={isDark} />
+                ))}
+              </div>
             </div>
           </div>
         </div>

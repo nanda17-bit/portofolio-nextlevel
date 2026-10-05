@@ -39,15 +39,16 @@ export const ContactSection: React.FC = () => {
   };
 
   return (
-    <section id="contact" className="relative z-10 py-20 sm:py-28 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
+    <section id="contact" className="relative z-10 py-12 sm:py-20 md:py-28 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto">
       {/* Section Title */}
-      <div className="flex flex-col items-center text-center mb-12">
+      <div className="flex flex-col items-center text-center mb-8 sm:mb-12">
         <span className="text-[11px] font-mono tracking-widest uppercase text-amber-500 mb-2">
           GET IN TOUCH
         </span>
 
-        <h2 className={`text-3xl sm:text-5xl font-extrabold tracking-tight ${isDark ? 'text-white' : 'text-zinc-900'}`}>
-          Kontak &amp; Kolaborasi
+        <h2 className="text-3xl sm:text-5xl font-extrabold tracking-tight">
+          <span className="text-amber-500">Kontak</span>{' '}
+          <span className={isDark ? 'text-white' : 'text-zinc-900'}>&amp; Kolaborasi</span>
         </h2>
 
         <p className={`mt-3 max-w-xl text-xs sm:text-sm ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
@@ -206,13 +207,13 @@ export const ContactSection: React.FC = () => {
               Kirim Pesan Langsung
             </h3>
             <p className={`text-xs mb-5 ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
-              Tuliskan pesan Anda dan data akan tersimpan ke inbox admin.
+              Tuliskan pesan Anda dan saya akan segera meresponsnya.
             </p>
 
             {isSent && (
               <div className="mb-5 p-3.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center gap-2.5 text-xs animate-fadeIn">
                 <CheckCircle2 className="h-4 w-4 flex-shrink-0" />
-                <span>Pesan berhasil dikirim ke inbox. Terima kasih!</span>
+                <span>Pesan berhasil terkirim. Terima kasih!</span>
               </div>
             )}
 

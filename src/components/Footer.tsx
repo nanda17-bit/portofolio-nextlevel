@@ -2,8 +2,7 @@
 
 import React from 'react';
 import { usePortfolio } from '@/context/PortfolioContext';
-import { ArrowUp, Shield } from 'lucide-react';
-import Link from 'next/link';
+import { ArrowUp } from 'lucide-react';
 
 export const Footer: React.FC = () => {
   const { data } = usePortfolio();
@@ -17,7 +16,19 @@ export const Footer: React.FC = () => {
       <div className="flex flex-col sm:flex-row items-center justify-between gap-5 text-xs text-zinc-500">
         <div className="flex items-center gap-2.5">
           <span className="font-semibold text-zinc-300">
-            {data.hero.title}
+            {(() => {
+              const title = data.hero.title || 'baliqDev';
+              const match = title.match(/^(.*)(dev)$/i);
+              if (match) {
+                return (
+                  <>
+                    {match[1]}
+                    <span className="text-amber-500">{match[2]}</span>
+                  </>
+                );
+              }
+              return title;
+            })()}
           </span>
           <span>•</span>
           <span className="font-mono">
@@ -26,10 +37,6 @@ export const Footer: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-6">
-          <Link href="/admin" className="hover:text-zinc-300 flex items-center gap-1.5 transition-colors">
-            <Shield className="h-3 w-3 text-amber-500" />
-            <span>Master Data</span>
-          </Link>
           <a href="/#projects" className="hover:text-zinc-300 transition-colors">
             Proyek
           </a>

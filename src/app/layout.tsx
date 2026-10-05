@@ -1,9 +1,9 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { Poppins, Montserrat } from 'next/font/google';
 import './globals.css';
 import { PortfolioProvider } from '@/context/PortfolioContext';
 import { BackgroundGrid } from '@/components/BackgroundGrid';
-import { FloatingAdminBtn } from '@/components/FloatingAdminBtn';
+import { CursorGlow } from '@/components/CursorGlow';
 
 const poppins = Poppins({
   variable: '--font-poppins',
@@ -18,6 +18,12 @@ const montserrat = Montserrat({
   subsets: ['latin'],
   display: 'swap',
 });
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+};
 
 export const metadata: Metadata = {
   title: 'baliqDev | Software Engineer & Full-Stack Developer',
@@ -41,15 +47,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang="id" className={`${poppins.variable} ${montserrat.variable} dark`} style={{ colorScheme: 'dark' }}>
-      <body className="min-h-screen relative flex flex-col font-sans antialiased selection:bg-orange-500 selection:text-white">
+      <body className="min-h-screen relative flex flex-col font-sans antialiased selection:bg-amber-500 selection:text-black w-full max-w-full">
         <PortfolioProvider>
           <BackgroundGrid />
-          <div className="relative z-10 flex-1 flex flex-col">
+          <CursorGlow />
+          <div className="relative z-10 flex-1 flex flex-col w-full max-w-full">
             {children}
           </div>
-          <FloatingAdminBtn />
         </PortfolioProvider>
       </body>
     </html>
   );
 }
+

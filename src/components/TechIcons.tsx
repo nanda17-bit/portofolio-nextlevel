@@ -159,6 +159,107 @@ export const TechIcon: React.FC<TechIconProps> = ({ iconKey, className = '', siz
         </svg>
       );
 
+    case 'php':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+          <ellipse cx="12" cy="12" rx="11" ry="7" fill="#777BB4" />
+          <path d="M7 14V10H9C9.8 10 10.3 10.4 10.3 11C10.3 11.6 9.8 12 9 12H7.9V14H7ZM7.9 11.3H8.9C9.2 11.3 9.4 11.2 9.4 11C9.4 10.8 9.2 10.7 8.9 10.7H7.9V11.3ZM11.2 14V10H12.1V11.5H13.6V10H14.5V14H13.6V12.3H12.1V14H11.2ZM15.5 14V10H17.5C18.3 10 18.8 10.4 18.8 11C18.8 11.6 18.3 12 17.5 12H16.4V14H15.5ZM16.4 11.3H17.4C17.7 11.3 17.9 11.2 17.9 11C17.9 10.8 17.7 10.7 17.4 10.7H16.4V11.3Z" fill="white" />
+        </svg>
+      );
+
+    case 'laravel':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+          <path d="M12 2L3 7V17L12 22L21 17V7L12 2Z" fill="#FF2D20" fillOpacity="0.15" stroke="#FF2D20" strokeWidth="1.5" />
+          <path d="M8 8.5L12 10.8L16 8.5M12 10.8V15.5M8 13.2L12 15.5L16 13.2" stroke="#FF2D20" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      );
+
+    case 'vue':
+    case 'vuejs':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+          <polygon points="12,18.5 22,3.5 17.5,3.5 12,12.5 6.5,3.5 2,3.5" fill="#41B883" />
+          <polygon points="12,14 17.5,3.5 14.5,3.5 12,8 9.5,3.5 6.5,3.5" fill="#35495E" />
+        </svg>
+      );
+
+    case 'mysql':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+          <ellipse cx="12" cy="7" rx="8" ry="3.5" stroke="#00758F" strokeWidth="1.5" fill="#F29111" fillOpacity="0.2" />
+          <path d="M4 7V17C4 18.9 7.6 20.5 12 20.5C16.4 20.5 20 18.9 20 17V7" stroke="#00758F" strokeWidth="1.5" />
+          <path d="M4 12C4 13.9 7.6 15.5 12 15.5C16.4 15.5 20 13.9 20 12" stroke="#00758F" strokeWidth="1.5" />
+        </svg>
+      );
+
+    case 'mongodb':
+    case 'mongo':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+          <path d="M12 2C11.5 4 6 9.5 6 14C6 17.5 8.7 20.5 12 22C15.3 20.5 18 17.5 18 14C18 9.5 12.5 4 12 2Z" fill="#47A248" />
+          <path d="M12 2V22C12 22 12.5 21.5 13 20C14 17 15 15.5 15 14C15 10 12 4 12 2Z" fill="#3FA037" />
+        </svg>
+      );
+
+    case 'figma':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+          <circle cx="15.5" cy="12" r="3.5" fill="#1ABCFE" />
+          <path d="M8.5 5C10.4 5 12 6.6 12 8.5V12H8.5C6.6 12 5 10.4 5 8.5C5 6.6 6.6 5 8.5 5Z" fill="#F24E1E" />
+          <path d="M12 5H15.5C17.4 5 19 6.6 19 8.5C19 10.4 17.4 12 15.5 12H12V5Z" fill="#FF7262" />
+          <path d="M5 15.5C5 13.6 6.6 12 8.5 12H12V15.5C12 17.4 10.4 19 8.5 19C6.6 19 5 17.4 5 15.5Z" fill="#0ACF83" />
+          <path d="M5 8.5C5 10.4 6.6 12 8.5 12V5C6.6 5 5 6.6 5 8.5Z" fill="#A259FF" />
+        </svg>
+      );
+
+    case 'linux':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+          <ellipse cx="12" cy="14" rx="7" ry="8" fill="#FCC624" />
+          <circle cx="10" cy="8" r="1.5" fill="black" />
+          <circle cx="14" cy="8" r="1.5" fill="black" />
+          <polygon points="12,10 10.5,12 13.5,12" fill="#E95420" />
+          <path d="M6 19C7 17 9 17 12 17C15 17 17 17 18 19C17 21 14 22 12 22C10 22 7 21 6 19Z" fill="#E95420" />
+        </svg>
+      );
+
+    case 'aws':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+          <path d="M5 14C8 17 16 17 19 14M17 14L19 14L18 12" stroke="#FF9900" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+          <path d="M6 7L7.5 11H8.5L10 7M7 9.8H9" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+          <path d="M12 7L13.5 11H14.5L16 7M13 9.8H15" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+        </svg>
+      );
+
+    case 'html':
+    case 'html5':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+          <polygon points="4,2 20,2 18.5,19 12,21.5 5.5,19" fill="#E34F26" />
+          <polygon points="12,3.8 18.7,3.8 17.5,17.7 12,19.5" fill="#EF652A" />
+          <path d="M8 7H16L15.6 11.5H12V13H15.4L15.1 16.5L12 17.3V15.7L13.6 15.3L13.8 13.5H8L8 7Z" fill="white" />
+        </svg>
+      );
+
+    case 'css':
+    case 'css3':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+          <polygon points="4,2 20,2 18.5,19 12,21.5 5.5,19" fill="#1572B6" />
+          <polygon points="12,3.8 18.7,3.8 17.5,17.7 12,19.5" fill="#33A9DC" />
+          <path d="M8 7H16L15.6 11.5H12V13H15.4L15.1 16.5L12 17.3V15.7L13.6 15.3L13.8 13.5H8L8 7Z" fill="white" />
+        </svg>
+      );
+
+    case 'svelte':
+      return (
+        <svg width={size} height={size} viewBox="0 0 24 24" fill="none" className={className}>
+          <path d="M18.8 6.2C17.3 4 14.5 3 11.8 3.5C9.6 3.9 7.6 5.3 6.6 7.3C5.3 9.8 5.7 12.8 7.3 15L6 17C4.5 19.3 5 21.8 7.5 22C9.5 22.2 11.5 21.2 12.5 19.5L13.5 18C15 16 14.5 13.5 12.5 12C10.5 10.5 10 8 11.5 6.5C12.5 5.5 14 5.5 15 6.5L18.8 6.2Z" fill="#FF3E00" />
+        </svg>
+      );
+
     default:
       return (
         <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className}>

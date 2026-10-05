@@ -1,0 +1,232 @@
+{
+  "hero": {
+    "badge": "SOFTWARE ENGINEER & FULL-STACK DEVELOPER",
+    "title": "baliqDev",
+    "tagline": "CRAFTING ROBUST WEB SYSTEMS & SCALABLE DIGITAL PRODUCTS",
+    "description": "Fokus pada pengembangan aplikasi web performa tinggi, sistem informasi terintegrasi, dan antarmuka modern yang bersih.",
+    "imageUrl": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=2000&q=80",
+    "profileImageUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80",
+    "primaryBtnText": "Lihat Karya",
+    "primaryBtnLink": "#projects",
+    "secondaryBtnText": "Hubungi Saya",
+    "secondaryBtnLink": "#contact",
+    "stats": [
+      {
+        "label": "Tahun Pengalaman",
+        "value": "4+"
+      },
+      {
+        "label": "Proyek Tuntas",
+        "value": "30+"
+      },
+      {
+        "label": "Tingkat Kepuasan",
+        "value": "98%"
+      },
+      {
+        "label": "Teknologi Utama",
+        "value": "14+"
+      }
+    ]
+  },
+  "projects": [],
+  "techStack": [
+    {
+      "id": "tech-1791207983877",
+      "name": "PHP",
+      "category": "Bahasa Pemrograman",
+      "description": "Pemrograman backend web dinamis & RESTful API",
+      "iconKey": "php",
+      "color": "#777BB4"
+    },
+    {
+      "id": "tech-1791207988855",
+      "name": "Laravel",
+      "category": "Backend & API",
+      "description": "Framework PHP arsitektur MVC elegan & ekosistem kaya",
+      "iconKey": "laravel",
+      "color": "#FF2D20"
+    },
+    {
+      "id": "tech-1791207997048",
+      "name": "Tailwind CSS",
+      "category": "Frontend & Framework",
+      "description": "Utility-first CSS framework untuk styling cepat & presisi",
+      "iconKey": "tailwind",
+      "color": "#06B6D4"
+    },
+    {
+      "id": "tech-1791208007994",
+      "name": "MySQL",
+      "category": "Database & Cache",
+      "description": "Sistem database relasional open-source terpopuler di dunia",
+      "iconKey": "mysql",
+      "color": "#00758F"
+    },
+    {
+      "id": "tech-1791208017804",
+      "name": "Linux",
+      "category": "DevOps & Cloud",
+      "description": "Sistem operasi server produksi, bash script, & deployment",
+      "iconKey": "linux",
+      "color": "#FCC624"
+    },
+    {
+      "id": "tech-1791208025138",
+      "name": "HTML5",
+      "category": "Frontend & Framework",
+      "description": "Fondasi struktur semantik konten & dokumen web",
+      "iconKey": "html",
+      "color": "#E34F26"
+    },
+    {
+      "id": "tech-1791208029137",
+      "name": "CSS3",
+      "category": "Frontend & Framework",
+      "description": "Desain visual, animasi transisi, & responsive layout",
+      "iconKey": "css",
+      "color": "#1572B6"
+    },
+    {
+      "id": "tech-1791208040582",
+      "name": "Git & GitHub",
+      "category": "DevOps & Cloud",
+      "description": "Version control system & kolaborasi kode repositori",
+      "iconKey": "git",
+      "color": "#F05032"
+    },
+    {
+      "id": "tech-1791208048580",
+      "name": "React",
+      "category": "Frontend & Framework",
+      "description": "Library komponen antarmuka pengguna interaktif (SPA)",
+      "iconKey": "react",
+      "color": "#61DAFB"
+    }
+  ],
+  "contact": {
+    "email": "contact@baliq.dev",
+    "phone": "+62 812-3456-7890",
+    "location": "Malang & Jakarta, Indonesia",
+    "bio": "Software engineer yang berdedikasi membangun web application performan, bersih, dan handal. Terbuka untuk diskusi proyek dan kolaborasi pengembangan sistem.",
+    "availability": "Tersedia untuk proyek baru",
+    "socials": {
+      "github": "https://github.com/baliqdev",
+      "linkedin": "https://linkedin.com/in/baliqdev",
+      "instagram": "https://instagram.com/baliqdev",
+      "twitter": "https://x.com/baliqdev",
+      "telegram": "https://t.me/baliqdev"
+    }
+  },
+  "messages": [
+    {
+      "id": "msg-sample-1",
+      "name": "Budi Santoso",
+      "email": "budi.santoso@startup.co.id",
+      "subject": "Diskusi Pengembangan Web Portal",
+      "message": "Halo baliqDev, kami tertarik berkolaborasi untuk proyek pembuatan portal manajemen internal.",
+      "createdAt": "2026-10-02T10:15:00.000Z",
+      "read": true
+    }
+  ],
+  "songs": [
+    {
+      "id": "song-1791206528210",
+      "title": "33x",
+      "artist": "Perunggu",
+      "album": "33x",
+      "genre": "Spotify Track",
+      "duration": "7:14",
+      "coverUrl": "https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e022f6309d853e9a87b7ccb08a1",
+      "previewUrl": "https://p.scdn.co/mp3-preview/7ea62a1c3aceb7684169f1a477b24d5b3cef0a9f",
+      "spotifyUrl": "https://open.spotify.com/track/2pOLzpYmuDlcbTJUXYkPSr",
+      "color": "rgb(88, 82, 82)",
+      "gradient": "linear-gradient(135deg, rgb(88, 82, 82) 0%, #0d0d11 100%)",
+      "lyrics": "Risalah terikatnya\nBatin dan raga yang mengunci\nDiatas Sang Maha Daya\nSemua kendali terambil alih\n\nJikalau kau keluhkan\nDengung sumbang yang mengganggu\nBuka lagi visimu\nKau tahu mana urutan satu\n\nDiantara pusaran nirfungsi\nPetakan semua lagi\nTitik tuju yang t'lah terpatri\n\nMelamban bukanlah hal yang tabu\nKadang itu yang kau butuh\nBersandar hibahkan bebanmu\n\nRotasikan pandanganmu\nAmbil sudut yang terbaru\nBelum pernah kau coba\nLihat semua bukan dari matamu\n\nKelak kau kan mengingat\nYang membawamu kesini\nKami pernah disitu\nDi posisimu\nHelakan kesahmu\n\nDiantara pusaran nirfungsi\nPetakan semua lagi\nTitik tuju yang t'lah terpatri\n\nMelamban bukanlah hal yang tabu\nKadang itu yang kau butuh\nBersandar hibahkan bebanmu\n\nTak perlu kau berhenti kurasi\nIni hanya sementara\nBukan ujung dari rencana\n\nJalanmu kan sepanjang niatmu\nSimpan tegar dalam hati\nDua sembilan kau terus mencari\n\nSebutlah namaNya\nTetap di jalanNya\nKelak kau mengingat\nKau akan teringat\n\nSebutlah namaNya\nTetap di jalanNya\nKelak kau mengingat\nKau akan teringat\n\nSebutlah namaNya\nTetap di jalanNya\nKelak kau mengingat\nKau akan teringat\n\nSebutkanlah namaNya\nResapilah jalanNya\nKelak kau mengingat\nKau akan teringat\n\nTerus berenang\nLanjutlah mendaki\n\nTerus berenang\nLanjutlah mendaki\n\nTerus berenang\nLanjutlah mendaki\n\nTerus berenang\nLanjutlah mendaki"
+    },
+    {
+      "id": "song-1791206519521",
+      "title": "Berapa Kali Kita Akan Saling Memaafkan",
+      "artist": "Pamungkas",
+      "album": "Berapa Kali Kita Akan Saling Memaafkan",
+      "genre": "Spotify Track",
+      "duration": "4:40",
+      "coverUrl": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e027fd11848d664ff0e9a3694b2",
+      "previewUrl": "https://p.scdn.co/mp3-preview/be06dd32591ef2ad395ce4d81f32f2086f8f0928",
+      "spotifyUrl": "https://open.spotify.com/track/7c03QS94XIfcetKSNDhUdd",
+      "color": "rgb(64, 32, 0)",
+      "gradient": "linear-gradient(135deg, rgb(64, 32, 0) 0%, #0d0d11 100%)",
+      "lyrics": "Kau panggil lagi nama depanku\nBukannya cinta, bukannya sayang\nPertanda pasti, yeah, amarah murka\nDan panasnya hati, emosi buta\n\nOh, berapa kali kita akan saling memaafkan\nAtas nama janji 'tuk saling mengerti?\n\nSudah kuterima luka-luka lama\nYang engkau jaga, pandai-pandai aku\nIngatkan diri ada yang takkan pernah ku mengerti\nKarena tak pernah aku lalui yang kau lalui\n\nBerapa kali kita akan saling memaafkan\nAtas nama janji 'tuk saling mengerti?\n\n(It's not the end, we'll try again, we'll try again)\n(It's not the end, we'll try again)\n(Let's try again, let's try again, let's try again)\n\nKupanggil lagi, hm, nama kecilmu\nPengingat bahwa (it's not the end, we'll try again)\nKau yang tercinta (let's try again, let's try again, let's try again)\nKau yang tercinta, kau yang tercinta\nKau yang tercinta, kau yang tercinta\n\nOh, berapa kali kita akan saling memaafkan\nAtas nama janji 'tuk saling mengerti?\n\nOh, sudah kuterima luka-luka lama\nYang engkau jaga pandai-pandai aku\nIngatkan diri ada yang takkan pernah ku mengerti\nKarena tak pernah aku lalui yang kau lalui\n\nOh, berapa kali kita akan saling memaafkan\nAtas nama janji, oh, 'tuk saling mengerti?\n\nIt's not the end, we'll try again\nIt's not the end, it's not\nLet's try again, let's try again\nIt's not the end\n\nIt's not the end, we'll try again\nWe'll try again, we'll try"
+    },
+    {
+      "id": "song-1791206508931",
+      "title": "Kita Lewati Berdua",
+      "artist": "Overnight",
+      "album": "Kita Lewati Berdua",
+      "genre": "Spotify Track",
+      "duration": "3:59",
+      "coverUrl": "https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02d05559e98f982b79eb508dcc",
+      "previewUrl": "https://p.scdn.co/mp3-preview/4eabca8bfafa5f1ea1623eb02027ab29bdd9b865",
+      "spotifyUrl": "https://open.spotify.com/track/5Enpui55il1ZW0HgwRTSds",
+      "color": "rgb(159, 0, 0)",
+      "gradient": "linear-gradient(135deg, rgb(159, 0, 0) 0%, #0d0d11 100%)",
+      "lyrics": "Sepi menerpa\nSelimuti kabut jiwa\nMenjelma dirimu\nDalam untaian kata rindu\n\nSemoga jarak yang terbentang ini\nSegera mereda\nMerubah rindu yang meradang ini\nJadi kabar bahagia\n\nDi kala hujan turun deras\nKala rindunya merasuk jiwa\nTenangkan dirimu, aku bersamamu\nWalau tak kupeluk tubuhmu\n\nAtaupun saat gelap tiba\nMungkin hanya lentera intuisimu\nYang 'kan membawaku\nMembasuh perih di hatimu\n\nJangan pergi dulu, oh, Sayang\nTetap bersamaku\nKu tahu semua takkan mudah (ku tahu semua takkan mudah)\nJalannya pun akan panjang (jalannya pun akan panjang)\nNamun, percayalah\nKita akan lewati berdua\n\nDi kala hujan turun deras\nPekatnya badai mungkin terasa\nTenangkan dirimu, aku bersamamu\nWalau tak kupeluk tubuhmu (peluk aku)\n\nAtaupun saat gelap tiba\nMungkin hanya lentera intuisimu\nYang 'kan membawaku\nMembasuh perih di hatimu"
+    },
+    {
+      "id": "song-1791206495830",
+      "title": "Kisah Sedih Kontemporer (Air & Api)",
+      "artist": "Dongker",
+      "album": "Kisah Sedih Kontemporer (Air & Api)",
+      "genre": "Spotify Track",
+      "duration": "3:27",
+      "coverUrl": "https://image-cdn-fa.spotifycdn.com/image/ab67616d00001e02dafcc1e0b04485db7fe8e0c4",
+      "previewUrl": "https://p.scdn.co/mp3-preview/e609669af49a02b960c620032cf71df9a93413e4",
+      "spotifyUrl": "https://open.spotify.com/track/7zCiQIqSrjOJaOUddGMX42",
+      "color": "rgb(83, 83, 83)",
+      "gradient": "linear-gradient(135deg, rgb(83, 83, 83) 0%, #0d0d11 100%)",
+      "lyrics": "Di jalanan panjang menuju nirwana\nKita berdua tahu kita memang gila\nEntah karena kita skizofrenia\nEntah karena Korin atau Mira\n\nDi harapan panjang yang tiada habisnya\nKita berdua tahu kita pasti bisa\nMeski hidup kita singkat dan ditodong senjata\nMeski dunia tak berubah, adakah kau di sana?\n\nSampai kapan cinta kita terus mengalir\nLayaknya air\nYang dihadang api? Perih\nSampai kapan kita akan terus bernyanyi\nLagu-lagu Naif\nTentang air dan api? Perih\n\nMengapa kita saling membenci?\nAwalnya kita selalu memberi\nApakah mungkin hati yang murni\nSudah cukup berarti\nAtaukah kita belum mencoba\nMemberi waktu pada logika\nJangan seperti selama ini\nHidup bagaikan air dan api"
+    },
+    {
+      "id": "song-1791206476137",
+      "title": "Lagu Selepas Hujan",
+      "artist": "Dongker",
+      "album": "Lagu Selepas Hujan",
+      "genre": "Spotify Track",
+      "duration": "3:32",
+      "coverUrl": "https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02224aa6a20f9a55b76d669d18",
+      "previewUrl": "https://p.scdn.co/mp3-preview/db482c05ffe54c247b8863d70e90896f302c35b6",
+      "spotifyUrl": "https://open.spotify.com/track/5DcsPJ5VVz8V8YoLVO2T05",
+      "color": "rgb(61, 90, 62)",
+      "gradient": "linear-gradient(135deg, rgb(61, 90, 62) 0%, #0d0d11 100%)",
+      "lyrics": "Rindu dan rintiknya\nTergenang di jalan\nSelepas hujan\nKuingin pulang mencarimu\n\nLubang-lubang aspal\nMencelakai warga\nTata letak kota\nTak pernah pedulikan aku\n\nHidup memang bukan pilihan\nSemoga kita takkan menyesal\n\nKita terus berlari sampai mampus\nBahkan tangan kaki kita pun terputus\nNiat baik kita memang selalu tulus\nTapi takkan cukup selalu tutup mulut\nHusss\nKuterjebak melankolia\n\nKunyalakan Jimny dan Astreaku\nUntuk segera berangkat subuh nanti\nDengan bahan bakar subsidi gagal\nRakyat pun bersabar menanti ajal\n\nHidup memang bukan pilihan\nSemoga kita takkan menyesal\n\nKita terus berlari sampai mampus\nBahkan tangan kaki kita pun terputus\nNiat baik kita memang selalu tulus\nTapi takkan cukup selalu tutup mulut\nTangis yang tragis di reruntuh kota\nSenyum yang manis di wajahmu cinta\n\nKuterjebak melankolia\nSemoga kita bahagia"
+    },
+    {
+      "id": "song-1791206464298",
+      "title": "Sambutlah",
+      "artist": "The Jeblogs",
+      "album": "Sambutlah",
+      "genre": "Spotify Track",
+      "duration": "5:01",
+      "coverUrl": "https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e02b2ac8e98b0fe410e0bd9fd52",
+      "previewUrl": "https://p.scdn.co/mp3-preview/dc7e313a7f319584ac2da4677c83dcf230271b14",
+      "spotifyUrl": "https://open.spotify.com/track/2HSEx8vqPIu6aMZB60OVTm",
+      "color": "rgb(83, 83, 83)",
+      "gradient": "linear-gradient(135deg, rgb(83, 83, 83) 0%, #0d0d11 100%)",
+      "lyrics": "Sambutlah matahari\nYang terbit di ufuk timur\nMembelah gelap\nHangat merambat\nMembangunkan lelap\nSampaikan salam kami\nKepada bulan dan bintang\nOh tenang saja\nGenerasi baru telah tiba\nUh-uh-uh-uh\nUh-uh-uh-uh\nMalam yang memuakkan harus diakhiri\nGelapnya membungkam suara\nJiwa baru yang putih serupa lilin\nBakarlah kedua sisinya\nUh-uh-uh-uh\nUh-uh-uh-uh\nBenih-benih bertumbuh di sela puing\nHarapan mencari jalannya\nOrang-orang muda berkobar menjelma cahaya\nLajunya tak terbendung jadi bersiaplah maka rayakanlah\nTabuh genderangnya\nTiup terompetnya\nNyalakan api di dadanya\nSambutlah matahari\nYang terbit di ufuk timur\nMembelah gelap\nHangat merambat\nMembangunkan lelap\nSampaikan salam kami\nKepada bulan dan bintang\nOh tenang saja\nGenerasi baru telah tiba\nUh-uh-uh-uh\nUh-uh-uh-uh\nMungkin kita sampai\nMungkin saja tidak\nTugas kita hanyalah berjalan oh\nSambutlah matahari\nYang terbit di ufuk timur\nMembelah gelap\nHangat merambat\nMembangunkan lelap\nSampaikan salam kami\nKepada bulan dan bintang\nOh tenang saja\nGenerasi baru telah\nSambutlah matahari\nYang terbit di ufuk timur\nMembelah gelap\nHangat merambat\nMembangunkan lelap\nSampaikan salam kami\nKepada bulan dan bintang\nOh tenang saja\nGenerasi baru telah tiba\nUh-uh-uh-uh\nUh-uh-uh-uh\nUh-uh-uh-uh\nUh-uh-uh-uh"
+    },
+    {
+      "id": "song-1791206432847",
+      "title": "Menangisi Akhir Pekan",
+      "artist": "Jenny",
+      "album": "Menangisi Akhir Pekan",
+      "genre": "Spotify Track",
+      "duration": "4:30",
+      "coverUrl": "https://image-cdn-ak.spotifycdn.com/image/ab67616d00001e022d88ef49cdf1c03f26a3eb52",
+      "previewUrl": "https://p.scdn.co/mp3-preview/42d61ea64dd6c2ef0ef41c14eb231487c37c6b29",
+      "spotifyUrl": "https://open.spotify.com/track/5IqEcSpcNQ8Mb3XEe1s2iw",
+      "color": "rgb(83, 83, 83)",
+      "gradient": "linear-gradient(135deg, rgb(83, 83, 83) 0%, #0d0d11 100%)",
+      "lyrics": "Hingar bingar hampa\nDalam tempo yang semakin melambat\nSepekan tertukar dengan lari paksa rutinitas\nSatu terakhir dari tujuh\nSaatnya tanggalkan baju peranku\nSandarkan tubuh lelah lemah sandarkan\nSandarkan dulu\nPermintaan dan pemenuhan\nTerangkai dalam sebuah rantai makanan\nSepekan termakan dalam rantai makanan itu\nSatu paling ujung dari tujuh\nSaatnya tumpahkan keluh kesahku\nBingarkan panggung rendah luas terang tanpa barikade\nTeman dan pencerita\nPanggung dan pertunjukan\nCairan dan pendosa\nRayakan dengan asap\nDi hela napas\nJalan dan pencarian jawaban\nIngatan dan penyesalan\nTangisi akhir pekanmu\nSatu yang tearkhir dari tujuh\nSaatnya tanggalkan baju perangku\nSatu yang terakhir dari tujuh\nSaatnya sandarkan tubuh lelahku\nSatu yang terakhir dari tujuh\nSaatnya tumpahkan keluh kesahku\nSatu yang terakhir dari tujuh\nSaatnya bingarkan panggungku\nOw ow ow\nTeman dan pencerita\nPanggung dan pertunjukan\nCairan dan pendosa\nRayakan dengan asap\nDi hela napas\nJalan dan pencarian jawaban\nIngatan dan penyesalan\nRayakan akhir pekanmu\nTangisilah\nRayakanlah\nTangisilah\nRayakanlah\nTangisilah\nRayakanlah\nTangisilah"
+    }
+  ]
+}

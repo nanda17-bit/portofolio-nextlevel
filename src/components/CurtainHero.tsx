@@ -9,7 +9,7 @@ interface CurtainHeroProps {
 }
 
 // Animated counting number for hero stats (0 -> target)
-const StatCounter: React.FC<{ value: string }> = ({ value }) => {
+const StatCounter: React.FC<{ value: string; isOrange?: boolean }> = ({ value, isOrange }) => {
   const [currentVal, setCurrentVal] = useState(0);
 
   const match = value.match(/\d+/);
@@ -39,7 +39,7 @@ const StatCounter: React.FC<{ value: string }> = ({ value }) => {
   }, [targetNum]);
 
   return (
-    <span className="tabular-nums">
+    <span className={`tabular-nums ${isOrange ? 'text-amber-400' : ''}`}>
       {currentVal}{suffix}
     </span>
   );
@@ -149,6 +149,36 @@ export const CurtainHero: React.FC<CurtainHeroProps> = ({ onScrollProgress }) =>
     const CLOSE_AT = 0.70; // Trigger header closed state when completely shut
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+    const checkIsMobile = () => window.innerWidth < 768;
+
+    const resetToStaticHero = () => {
+      if (titleEl) {
+        titleEl.style.transform = 'none';
+        titleEl.style.opacity = '1';
+      }
+      if (btnEl) {
+        btnEl.style.opacity = '1';
+        btnEl.style.transform = 'none';
+        btnEl.style.pointerEvents = 'auto';
+      }
+      if (tagEl) {
+        tagEl.style.opacity = '1';
+        tagEl.style.transform = 'none';
+      }
+      if (statsEl) {
+        statsEl.style.opacity = '1';
+        statsEl.style.transform = 'none';
+      }
+      if (bg) {
+        bg.style.transform = 'none';
+        bg.style.filter = 'brightness(1)';
+      }
+      setShowResetBtn(false);
+      if (onScrollProgress) {
+        onScrollProgress(0, false);
+      }
+    };
+
     if (reduceMotion) {
       pl.style.transform = `translateX(0) skewX(${SKEW}deg)`;
       pr.style.transform = `translateX(0) skewX(${SKEW}deg)`;
@@ -163,6 +193,7 @@ export const CurtainHero: React.FC<CurtainHeroProps> = ({ onScrollProgress }) =>
     let animId: number | null = null;
 
     const computeTargetP = () => {
+      if (checkIsMobile()) return 0;
       const rect = track.getBoundingClientRect();
       const range = track.offsetHeight - window.innerHeight;
       const y = Math.min(Math.max(-rect.top, 0), range);
@@ -170,6 +201,11 @@ export const CurtainHero: React.FC<CurtainHeroProps> = ({ onScrollProgress }) =>
     };
 
     const applyProgress = (p: number) => {
+      if (checkIsMobile()) {
+        resetToStaticHero();
+        return;
+      }
+
       // Tirai menutup 100% penuh dari p = 0 hingga p = 0.70 (benar-benar menutup rapat tanpa celah)
       const closeP = Math.min(1, Math.max(0, p / 0.70));
       // Ken Perlin's Smootherstep curve for curtain closing (zero 1st & 2nd derivatives at boundaries for ultra-smooth inertia)
@@ -303,6 +339,15 @@ export const CurtainHero: React.FC<CurtainHeroProps> = ({ onScrollProgress }) =>
     };
 
     const handleScroll = () => {
+      if (checkIsMobile()) {
+        resetToStaticHero();
+        const currentY = window.scrollY;
+        if (onScrollProgress) {
+          onScrollProgress(currentY > 80 ? 1 : 0, currentY > 80);
+        }
+        return;
+      }
+
       const currentY = window.scrollY;
       setShowResetBtn(currentY > 150);
 
@@ -313,11 +358,18 @@ export const CurtainHero: React.FC<CurtainHeroProps> = ({ onScrollProgress }) =>
       }
     };
 
-    // Inisialisasi posisi awal tanpa hentakan
-    targetP = computeTargetP();
-    currentP = targetP;
-    applyProgress(currentP);
-    setShowResetBtn(window.scrollY > 150);
+    if (checkIsMobile()) {
+      resetToStaticHero();
+      if (onScrollProgress) {
+        onScrollProgress(window.scrollY > 80 ? 1 : 0, window.scrollY > 80);
+      }
+    } else {
+      // Inisialisasi posisi awal tanpa hentakan pada desktop
+      targetP = computeTargetP();
+      currentP = targetP;
+      applyProgress(currentP);
+      setShowResetBtn(window.scrollY > 150);
+    }
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     window.addEventListener('resize', handleScroll);
@@ -330,10 +382,10 @@ export const CurtainHero: React.FC<CurtainHeroProps> = ({ onScrollProgress }) =>
   }, [onScrollProgress, isDark]);
 
   return (
-    <div id="hero" ref={trackRef} className="relative h-[220vh] w-full">
-      {/* Sticky Hero Stage */}
-      <section className="sticky top-0 h-screen w-full overflow-hidden bg-black select-none">
-        {/* Dynamic Background Image - Static (gausah ikut ngezoom, dia tetap) */}
+    <div id="hero" ref={trackRef} className="relative md:h-[220vh] h-auto w-full">
+      {/* Hero Stage - Normal relative on mobile, sticky 220vh curtain on desktop */}
+      <section className="relative md:sticky md:top-0 min-h-[85vh] sm:min-h-screen md:h-screen w-full overflow-hidden bg-black select-none flex items-center justify-center">
+        {/* Dynamic Background Image - Static */}
         <div
           ref={bgRef}
           className="absolute inset-0 bg-cover bg-center z-0"
@@ -342,10 +394,10 @@ export const CurtainHero: React.FC<CurtainHeroProps> = ({ onScrollProgress }) =>
           }}
         />
 
-        {/* Hero Content - Placed BEHIND the curtain panels (z-10) so panels cover it */}
+        {/* Hero Content - Placed BEHIND the curtain panels on desktop (z-10), clean static on mobile */}
         <div
           ref={contentRef}
-          className="relative z-10 flex h-full w-full flex-col items-center justify-center px-4 pt-14 pb-12 text-center text-white will-change-transform max-w-5xl mx-auto"
+          className="relative z-10 flex min-h-[85vh] sm:min-h-screen md:h-full w-full flex-col items-center justify-center px-4 pt-20 pb-10 sm:pb-16 md:pt-14 md:pb-12 text-center text-white will-change-transform max-w-5xl mx-auto"
         >
           {/* Main Headline - Montserrat Bold with hardware accelerated compositor */}
           <h1
@@ -354,9 +406,23 @@ export const CurtainHero: React.FC<CurtainHeroProps> = ({ onScrollProgress }) =>
               fontFamily: 'var(--font-montserrat)',
               textShadow: '0 8px 32px rgba(0, 0, 0, 0.75)',
             }}
-            className="font-montserrat font-extrabold text-white text-5xl sm:text-7xl md:text-8xl lg:text-[7.2rem] tracking-tight leading-none will-change-transform origin-center select-none [backface-visibility:hidden] [transform-style:preserve-3d]"
+            className="font-montserrat font-extrabold text-white text-4xl xs:text-5xl sm:text-7xl md:text-8xl lg:text-[7.2rem] tracking-tight leading-none will-change-transform origin-center select-none [backface-visibility:hidden] [transform-style:preserve-3d] max-w-full break-words"
           >
-            {data.hero.title}
+            {(() => {
+              const title = data.hero.title || 'baliqDev';
+              const match = title.match(/^(.*)(dev)$/i);
+              if (match) {
+                return (
+                  <>
+                    {match[1]}
+                    <span className="text-amber-500 drop-shadow-[0_0_35px_rgba(245,158,11,0.45)]">
+                      {match[2]}
+                    </span>
+                  </>
+                );
+              }
+              return title;
+            })()}
           </h1>
 
           {/* Tagline with Left-to-Right Typewriter Effect (Cursor moves from left to right) */}
@@ -375,7 +441,7 @@ export const CurtainHero: React.FC<CurtainHeroProps> = ({ onScrollProgress }) =>
             <a
               href={data.hero.primaryBtnLink}
               style={{ '--btn-fill-bg': '#d97706' } as React.CSSProperties}
-              className="btn-fill-effect px-7 py-3 rounded-full bg-white text-black font-semibold text-xs sm:text-sm hover:text-white border border-transparent hover:border-amber-600/40 shadow-sm cursor-pointer"
+              className="btn-fill-effect px-7 py-3 rounded-full bg-amber-500 text-black font-semibold text-xs sm:text-sm hover:text-white border border-amber-400/40 shadow-[0_4px_25px_rgba(245,158,11,0.4)] hover:shadow-[0_4px_30px_rgba(245,158,11,0.6)] transition-all cursor-pointer"
             >
               <span className="relative z-10">{data.hero.primaryBtnText}</span>
             </a>
@@ -393,16 +459,25 @@ export const CurtainHero: React.FC<CurtainHeroProps> = ({ onScrollProgress }) =>
             ref={statsRef}
             className="mt-8 sm:mt-10 hidden sm:grid grid-cols-2 sm:grid-cols-4 gap-6 md:gap-8 border-t border-white/10 pt-5 will-change-transform transition-all duration-200"
           >
-            {data.hero.stats?.map((stat: { label: string; value: string }, idx: number) => (
-              <div key={idx} className="flex flex-col items-center">
-                <span className="text-base sm:text-lg md:text-xl font-bold text-zinc-100 font-mono">
-                  <StatCounter value={stat.value} />
-                </span>
-                <span className="text-[10px] text-zinc-400 tracking-wider uppercase mt-0.5">
-                  {stat.label}
-                </span>
-              </div>
-            ))}
+            {data.hero.stats?.map((stat: { label: string; value: string }, idx: number) => {
+              const isPercentage = stat.value.includes('%');
+              return (
+                <div key={idx} className="flex flex-col items-center">
+                  <span
+                    className={`text-base sm:text-lg md:text-xl font-bold font-mono transition-colors ${
+                      isPercentage
+                        ? 'text-amber-400 drop-shadow-[0_0_15px_rgba(245,158,11,0.45)]'
+                        : 'text-zinc-100'
+                    }`}
+                  >
+                    <StatCounter value={stat.value} isOrange={isPercentage} />
+                  </span>
+                  <span className="text-[10px] text-zinc-400 tracking-wider uppercase mt-0.5">
+                    {stat.label}
+                  </span>
+                </div>
+              );
+            })}
           </div>
 
           {/* Scroll Down Indicator */}
@@ -414,10 +489,10 @@ export const CurtainHero: React.FC<CurtainHeroProps> = ({ onScrollProgress }) =>
           </div>
         </div>
 
-        {/* Skariga Curtain Left Panel - IN FRONT OF CONTENT (z-20) to physically cover text */}
+        {/* Skariga Curtain Left Panel - DESKTOP ONLY (hidden on mobile) */}
         <div
           ref={leftPanelRef}
-          className={`pointer-events-none absolute -top-[10vh] -bottom-[10vh] z-20 will-change-transform [backface-visibility:hidden] [transform-style:preserve-3d] transition-colors duration-300 ${isDark ? 'bg-[#000000]' : 'bg-[#fafafa]'
+          className={`pointer-events-none absolute -top-[10vh] -bottom-[10vh] z-20 will-change-transform [backface-visibility:hidden] [transform-style:preserve-3d] transition-colors duration-300 hidden md:block ${isDark ? 'bg-[#000000]' : 'bg-[#fafafa]'
             }`}
           style={{
             width: 'calc(50% + 40vh)',
@@ -426,10 +501,10 @@ export const CurtainHero: React.FC<CurtainHeroProps> = ({ onScrollProgress }) =>
           }}
         />
 
-        {/* Skariga Curtain Right Panel - IN FRONT OF CONTENT (z-20) to physically cover text */}
+        {/* Skariga Curtain Right Panel - DESKTOP ONLY (hidden on mobile) */}
         <div
           ref={rightPanelRef}
-          className={`pointer-events-none absolute -top-[10vh] -bottom-[10vh] z-20 will-change-transform [backface-visibility:hidden] [transform-style:preserve-3d] transition-colors duration-300 ${isDark ? 'bg-[#000000]' : 'bg-[#fafafa]'
+          className={`pointer-events-none absolute -top-[10vh] -bottom-[10vh] z-20 will-change-transform [backface-visibility:hidden] [transform-style:preserve-3d] transition-colors duration-300 hidden md:block ${isDark ? 'bg-[#000000]' : 'bg-[#fafafa]'
             }`}
           style={{
             width: 'calc(50% + 40vh)',
@@ -438,11 +513,11 @@ export const CurtainHero: React.FC<CurtainHeroProps> = ({ onScrollProgress }) =>
           }}
         />
 
-        {/* Arrow Layer: z-30 (Above both panels so arrows pass through/over the 2 curtain pieces) */}
+        {/* Arrow Layer: z-30 - DESKTOP ONLY (hidden on mobile) */}
         {/* Left Panel Arrow Track - synchronous with Left Panel */}
         <div
           ref={leftArrowTrackRef}
-          className="pointer-events-none absolute -top-[10vh] -bottom-[10vh] z-30 will-change-transform [backface-visibility:hidden] [transform-style:preserve-3d]"
+          className="pointer-events-none absolute -top-[10vh] -bottom-[10vh] z-30 will-change-transform [backface-visibility:hidden] [transform-style:preserve-3d] hidden md:block"
           style={{
             width: 'calc(50% + 40vh)',
             left: '-20vh',
@@ -470,10 +545,10 @@ export const CurtainHero: React.FC<CurtainHeroProps> = ({ onScrollProgress }) =>
           </div>
         </div>
 
-        {/* Right Panel Arrow Track - synchronous with Right Panel */}
+        {/* Right Panel Arrow Track - DESKTOP ONLY (hidden on mobile) */}
         <div
           ref={rightArrowTrackRef}
-          className="pointer-events-none absolute -top-[10vh] -bottom-[10vh] z-30 will-change-transform [backface-visibility:hidden] [transform-style:preserve-3d]"
+          className="pointer-events-none absolute -top-[10vh] -bottom-[10vh] z-30 will-change-transform [backface-visibility:hidden] [transform-style:preserve-3d] hidden md:block"
           style={{
             width: 'calc(50% + 40vh)',
             right: '-20vh',
@@ -502,9 +577,9 @@ export const CurtainHero: React.FC<CurtainHeroProps> = ({ onScrollProgress }) =>
         </div>
       </section>
 
-      {/* Tombol Panah Reset ke Atas di Pojok Kiri Layar */}
+      {/* Tombol Panah Reset ke Atas di Pojok Kiri Layar - DESKTOP ONLY */}
       <div
-        className={`fixed bottom-5 left-5 z-40 transition-all duration-300 ${showResetBtn ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-4 pointer-events-none'
+        className={`fixed bottom-5 left-5 z-40 transition-all duration-300 hidden md:block ${showResetBtn ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 translate-y-4 pointer-events-none'
           }`}
       >
         <button

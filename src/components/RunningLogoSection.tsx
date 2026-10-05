@@ -1,10 +1,8 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useMemo } from 'react';
-import Link from 'next/link';
 import { usePortfolio } from '@/context/PortfolioContext';
 import { TechIcon } from './TechIcons';
-import { Camera, Sparkles } from 'lucide-react';
 
 export const RunningLogoSection: React.FC = () => {
   const { data, theme } = usePortfolio();
@@ -98,7 +96,24 @@ export const RunningLogoSection: React.FC = () => {
     rightAnimRef.current.isPaused = isRightPaused;
   }, [isRightPaused]);
 
+  const sectionRef = useRef<HTMLElement>(null);
+  const [isInView, setIsInView] = useState(false);
+
   useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setIsInView(entry.isIntersecting);
+      },
+      { threshold: 0.05, rootMargin: '120px 0px 120px 0px' }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!isInView) return;
     let animId: number;
     let lastTime = performance.now();
 
@@ -106,17 +121,20 @@ export const RunningLogoSection: React.FC = () => {
       const dt = Math.min((now - lastTime) / 1000, 0.1);
       lastTime = now;
 
-      // Faster, energetic orbital motion as requested (~0.18 rad/s)
-      const speed = 0.18;
+      // Only compute orbital math on desktop (width >= 768)
+      if (window.innerWidth >= 768) {
+        // Faster, energetic orbital motion as requested (~0.18 rad/s)
+        const speed = 0.18;
 
-      if (!leftAnimRef.current.isPaused) {
-        leftAnimRef.current.offset = (leftAnimRef.current.offset + speed * dt) % (2 * Math.PI);
-        setLeftOffset(leftAnimRef.current.offset);
-      }
+        if (!leftAnimRef.current.isPaused) {
+          leftAnimRef.current.offset = (leftAnimRef.current.offset + speed * dt) % (2 * Math.PI);
+          setLeftOffset(leftAnimRef.current.offset);
+        }
 
-      if (!rightAnimRef.current.isPaused) {
-        rightAnimRef.current.offset = (rightAnimRef.current.offset + speed * dt) % (2 * Math.PI);
-        setRightOffset(rightAnimRef.current.offset);
+        if (!rightAnimRef.current.isPaused) {
+          rightAnimRef.current.offset = (rightAnimRef.current.offset + speed * dt) % (2 * Math.PI);
+          setRightOffset(rightAnimRef.current.offset);
+        }
       }
 
       animId = requestAnimationFrame(loop);
@@ -124,7 +142,7 @@ export const RunningLogoSection: React.FC = () => {
 
     animId = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(animId);
-  }, []);
+  }, [isInView]);
 
   // User photo (fallback to hero image)
   const profilePhoto = data.hero.profileImageUrl || data.hero.imageUrl;
@@ -132,15 +150,16 @@ export const RunningLogoSection: React.FC = () => {
   return (
     <section
       id="tech"
-      className="relative z-10 w-full py-16 sm:py-20 md:py-24 overflow-hidden border-t border-b border-white/5 select-none"
+      ref={sectionRef}
+      className="relative z-10 w-full py-10 sm:py-16 md:py-24 overflow-hidden border-t border-b border-white/5 select-none"
     >
       {/* Background ambient lighting */}
       <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
         <div className="w-[500px] sm:w-[700px] h-[500px] sm:h-[700px] rounded-full bg-amber-500/5 blur-[140px]" />
       </div>
 
-      {/* Main Full-Width Constellation Stage */}
-      <div className="relative w-full h-[520px] sm:h-[580px] md:h-[640px] lg:h-[700px] flex items-center justify-center">
+      {/* Main Full-Width Constellation Stage - DESKTOP ONLY */}
+      <div className="hidden md:flex relative w-full h-[520px] sm:h-[580px] md:h-[640px] lg:h-[700px] items-center justify-center">
 
         {/* ======================================================== */}
         {/* 1. LEFT SEMI-CIRCLE (LAYAR KIRI - SETENGAH LINGKARAN MERAH) */}
@@ -217,10 +236,10 @@ export const RunningLogoSection: React.FC = () => {
                   style={{
                     borderColor: tech.color ? `${tech.color}45` : undefined,
                   }}
-                  className={`flex items-center gap-2 sm:gap-2.5 px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-2xl border backdrop-blur-md transition-all duration-200 hover:scale-110 shadow-xl ${
+                  className={`flex items-center gap-2 sm:gap-2.5 px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-2xl border transform-gpu [backface-visibility:hidden] transition-transform duration-200 hover:scale-110 shadow-lg ${
                     isDark
-                      ? 'bg-[#0a0a0a]/90 text-zinc-200 hover:border-amber-500/70 hover:shadow-amber-500/20'
-                      : 'bg-white/95 text-zinc-800 border-zinc-200 hover:border-amber-500 hover:shadow-amber-500/15'
+                      ? 'bg-[#0f0f13] text-zinc-200 hover:border-amber-500/70 hover:shadow-amber-500/20'
+                      : 'bg-white text-zinc-800 border-zinc-200 hover:border-amber-500 hover:shadow-amber-500/15'
                   }`}
                 >
                   <div
@@ -274,30 +293,24 @@ export const RunningLogoSection: React.FC = () => {
 
             {/* Subtle bottom vignette */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent pointer-events-none" />
-
-            {/* Quick edit photo overlay on hover (links to /admin) */}
-            <Link
-              href="/admin"
-              title="Ganti Foto di Data Master / Admin"
-              className="absolute inset-0 bg-black/65 backdrop-blur-xs flex flex-col items-center justify-center text-white opacity-0 group-hover/img:opacity-100 transition-opacity duration-200 cursor-pointer"
-            >
-              <div className="p-2.5 rounded-full bg-amber-500/20 text-amber-400 mb-1.5 border border-amber-500/30">
-                <Camera className="h-5 w-5" />
-              </div>
-              <span className="text-xs font-medium text-amber-200">
-                Ganti Foto
-              </span>
-              <span className="text-[10px] text-zinc-400 mt-0.5">
-                Klik untuk ubah di Admin
-              </span>
-            </Link>
           </div>
 
           {/* Owner Name OUTSIDE the photo card as requested */}
           <div className="mt-4 flex flex-col items-center text-center">
-            <h3 className="text-sm sm:text-base md:text-lg font-semibold tracking-wide text-zinc-100 drop-shadow-md">
+            <h3
+              className={`text-sm sm:text-base font-medium tracking-wide transition-colors duration-300 ${
+                isDark ? 'text-white' : 'text-zinc-900'
+              }`}
+            >
               Iqbal Isnanda Nurhuda
             </h3>
+            <p
+              className={`text-base sm:text-lg font-semibold tracking-tight mt-0.5 transition-colors duration-300 ${
+                isDark ? 'text-zinc-400' : 'text-zinc-500'
+              }`}
+            >
+              Backend Developer
+            </p>
           </div>
         </div>
 
@@ -376,10 +389,10 @@ export const RunningLogoSection: React.FC = () => {
                   style={{
                     borderColor: tech.color ? `${tech.color}45` : undefined,
                   }}
-                  className={`flex items-center gap-2 sm:gap-2.5 px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-2xl border backdrop-blur-md transition-all duration-200 hover:scale-110 shadow-xl ${
+                  className={`flex items-center gap-2 sm:gap-2.5 px-3 py-2 sm:px-3.5 sm:py-2.5 rounded-2xl border transform-gpu [backface-visibility:hidden] transition-transform duration-200 hover:scale-110 shadow-lg ${
                     isDark
-                      ? 'bg-[#0a0a0a]/90 text-zinc-200 hover:border-amber-500/70 hover:shadow-amber-500/20'
-                      : 'bg-white/95 text-zinc-800 border-zinc-200 hover:border-amber-500 hover:shadow-amber-500/15'
+                      ? 'bg-[#0f0f13] text-zinc-200 hover:border-amber-500/70 hover:shadow-amber-500/20'
+                      : 'bg-white text-zinc-800 border-zinc-200 hover:border-amber-500 hover:shadow-amber-500/15'
                   }`}
                 >
                   <div
@@ -402,6 +415,138 @@ export const RunningLogoSection: React.FC = () => {
           })}
         </div>
 
+      </div>
+
+      {/* ======================================================== */}
+      {/* MOBILE VIEW (md:hidden): Clean Photo + Horizontal Running Marquee */}
+      {/* ======================================================== */}
+      <div className="md:hidden flex flex-col items-center justify-center w-full max-w-full px-4 pt-2 pb-4 gap-6 overflow-hidden">
+        {/* Center User Photo */}
+        <div className="relative z-30 flex flex-col items-center justify-center group pointer-events-auto">
+          {/* Subtle cyan/blue ambient glow matching the design */}
+          <div
+            className="absolute rounded-3xl -inset-4 bg-gradient-to-tr from-cyan-500/20 via-blue-500/10 to-amber-500/15 blur-2xl pointer-events-none opacity-80"
+          />
+
+          {/* Photo Card Container */}
+          <div
+            className={`relative w-[150px] h-[190px] rounded-3xl overflow-hidden border-2 transition-all duration-300 backdrop-blur-md shadow-2xl ${
+              isDark
+                ? 'bg-zinc-950/70 border-cyan-500/30 shadow-black'
+                : 'bg-white/80 border-cyan-500/30 shadow-xl'
+            }`}
+          >
+            <img
+              src={profilePhoto}
+              alt="Iqbal Isnanda Nurhuda"
+              className="w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-transparent pointer-events-none" />
+          </div>
+
+          {/* Owner Name */}
+          <div className="mt-3.5 flex flex-col items-center text-center">
+            <h3
+              className={`text-sm sm:text-base font-medium tracking-wide transition-colors duration-300 ${
+                isDark ? 'text-white' : 'text-zinc-900'
+              }`}
+            >
+              Iqbal Isnanda Nurhuda
+            </h3>
+            <p
+              className={`text-base sm:text-lg font-semibold tracking-tight mt-0.5 transition-colors duration-300 ${
+                isDark ? 'text-zinc-400' : 'text-zinc-500'
+              }`}
+            >
+              Backend Developer
+            </p>
+          </div>
+        </div>
+
+        {/* 2-Row Horizontal Running Logo / Programming Language Marquee */}
+        <div className="relative w-full max-w-full overflow-hidden py-2 flex flex-col gap-3">
+          {/* Gradient fade edge masks */}
+          <div
+            className={`pointer-events-none absolute inset-y-0 left-0 w-10 z-20 bg-gradient-to-r ${
+              isDark ? 'from-black to-transparent' : 'from-[#fafafa] to-transparent'
+            }`}
+          />
+          <div
+            className={`pointer-events-none absolute inset-y-0 right-0 w-10 z-20 bg-gradient-to-l ${
+              isDark ? 'from-black to-transparent' : 'from-[#fafafa] to-transparent'
+            }`}
+          />
+
+          {/* Row 1: Running Left */}
+          <div className="overflow-hidden w-full">
+            <div
+              className="flex gap-2.5 w-max animate-marquee"
+              style={{ animationDuration: '30s' }}
+            >
+              {[...leftTech, ...leftTech, ...leftTech, ...leftTech].map((tech, idx) => (
+                <div
+                  key={`mob-l-${tech.id}-${idx}`}
+                  style={{
+                    borderColor: tech.color ? `${tech.color}45` : undefined,
+                  }}
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border backdrop-blur-md transition-all shadow-md flex-shrink-0 ${
+                    isDark
+                      ? 'bg-[#0f0f11]/90 text-zinc-200 border-white/10'
+                      : 'bg-white/95 text-zinc-800 border-zinc-200'
+                  }`}
+                >
+                  <div
+                    className="flex items-center justify-center rounded-lg p-1 flex-shrink-0"
+                    style={{ backgroundColor: `${tech.color || '#d97706'}18` }}
+                  >
+                    <TechIcon iconKey={tech.iconKey} size={15} />
+                  </div>
+                  <span className="font-semibold text-xs leading-none">
+                    {tech.name}
+                  </span>
+                  <span className="text-[9px] font-mono uppercase tracking-wider text-zinc-400">
+                    {tech.category}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Row 2: Running Right (Reverse) */}
+          <div className="overflow-hidden w-full">
+            <div
+              className="flex gap-2.5 w-max animate-marquee-reverse"
+              style={{ animationDuration: '30s' }}
+            >
+              {[...rightTech, ...rightTech, ...rightTech, ...rightTech].map((tech, idx) => (
+                <div
+                  key={`mob-r-${tech.id}-${idx}`}
+                  style={{
+                    borderColor: tech.color ? `${tech.color}45` : undefined,
+                  }}
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border backdrop-blur-md transition-all shadow-md flex-shrink-0 ${
+                    isDark
+                      ? 'bg-[#0f0f11]/90 text-zinc-200 border-white/10'
+                      : 'bg-white/95 text-zinc-800 border-zinc-200'
+                  }`}
+                >
+                  <div
+                    className="flex items-center justify-center rounded-lg p-1 flex-shrink-0"
+                    style={{ backgroundColor: `${tech.color || '#d97706'}18` }}
+                  >
+                    <TechIcon iconKey={tech.iconKey} size={15} />
+                  </div>
+                  <span className="font-semibold text-xs leading-none">
+                    {tech.name}
+                  </span>
+                  <span className="text-[9px] font-mono uppercase tracking-wider text-zinc-400">
+                    {tech.category}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );

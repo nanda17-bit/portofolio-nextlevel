@@ -17,13 +17,14 @@ html.light,
 html {
   scroll-behavior: smooth;
   background-color: var(--background);
+  overflow-x: clip;
 }
 
 body {
   background-color: var(--background);
   color: var(--foreground);
   font-family: var(--font-poppins);
-  overflow-x: hidden;
+  overflow-x: clip;
   min-height: 100vh;
 }
 
@@ -81,7 +82,6 @@ body {
   0% {
     transform: translate3d(0, 0, 0);
   }
-
   100% {
     transform: translate3d(-50%, 0, 0);
   }
@@ -91,33 +91,37 @@ body {
   0% {
     transform: translate3d(-50%, 0, 0);
   }
-
   100% {
     transform: translate3d(0, 0, 0);
   }
 }
 
 .animate-rating-marquee-left {
-  animation: rating-marquee-left 48s linear infinite;
+  animation: rating-marquee-left 50s linear infinite;
   display: flex;
   width: max-content;
   will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 .animate-rating-marquee-right {
-  animation: rating-marquee-right 48s linear infinite;
+  animation: rating-marquee-right 50s linear infinite;
   display: flex;
   width: max-content;
   will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
-/* Pause smoothly when a card is hovered */
-.animate-rating-marquee-left:has(.rating-card:hover),
-.animate-rating-marquee-right:has(.rating-card:hover),
+/* Pause smoothly when hovering the row track */
+.rating-marquee-track:hover .animate-rating-marquee-left,
+.rating-marquee-track:hover .animate-rating-marquee-right,
 .animate-rating-marquee-left:hover,
 .animate-rating-marquee-right:hover {
   animation-play-state: paused;
 }
+
 
 /* Glass Liquid Water Fill on Hover Animation */
 .btn-fill-effect {

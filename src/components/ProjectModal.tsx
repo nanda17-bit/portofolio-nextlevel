@@ -51,7 +51,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
 
           {/* Category & Year badge */}
           <div className="absolute bottom-4 left-6 flex items-center gap-2">
-            <span className="px-3 py-1 rounded-full text-xs font-semibold bg-orange-500 text-white shadow-md">
+            <span className="px-3 py-1 rounded-full text-xs font-semibold bg-amber-500 text-black shadow-md">
               {project.category}
             </span>
             {project.year && (
