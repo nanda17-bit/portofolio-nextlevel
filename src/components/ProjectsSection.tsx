@@ -50,6 +50,8 @@ export const ProjectsSection: React.FC = () => {
     let animId: number;
 
     const handleScroll = () => {
+      // Desktop-only fan effect: mobile uses lightweight swipe carousel, skip work
+      if (typeof window !== 'undefined' && window.innerWidth < 768) return;
       if (!carouselRef.current) return;
       const rect = carouselRef.current.getBoundingClientRect();
       const windowHeight = window.innerHeight;
@@ -60,7 +62,12 @@ export const ProjectsSection: React.FC = () => {
       const end = windowHeight * 0.35;
       const raw = (start - rect.top) / (start - end);
       const clamped = Math.min(1, Math.max(0, raw));
-      setSpreadProgress(clamped);
+      setSpreadProgress((prev) => {
+        if (Math.abs(prev - clamped) < 0.005 && clamped > 0 && clamped < 1) {
+          return prev;
+        }
+        return clamped;
+      });
     };
 
     const onScroll = () => {

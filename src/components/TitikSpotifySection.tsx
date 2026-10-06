@@ -321,13 +321,14 @@ export const TitikSpotifySection: React.FC = () => {
     };
   }, [songs]);
 
-  // Continuous gentle rotation loop (NOT driven by scroll, pauses when hovered or offscreen)
+  // Continuous gentle rotation loop (Desktop only - NOT driven by scroll, pauses when hovered or offscreen)
   useEffect(() => {
-    if (!isInView || isMobile) return;
+    if (!isInView || isMobile || (typeof window !== 'undefined' && window.innerWidth < 1024)) return;
     let animId: number;
     let lastTime = performance.now();
 
     const loop = (currentTime: number) => {
+      if (window.innerWidth < 1024) return;
       const delta = Math.min(0.1, (currentTime - lastTime) / 1000);
       lastTime = currentTime;
 
@@ -492,15 +493,15 @@ export const TitikSpotifySection: React.FC = () => {
         {/* Ambient background glow */}
         <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
 
-          {/* Subtle warm ambient shadow lights - soft diffused glow, not glaring */}
+          {/* Subtle warm ambient shadow lights - soft diffused glow (desktop only for mobile performance) */}
           <div
-            className="absolute -top-32 left-1/4 w-[600px] h-[600px] rounded-full blur-[170px] opacity-[0.06]"
+            className="hidden sm:block absolute -top-32 left-1/4 w-[600px] h-[600px] rounded-full blur-[170px] opacity-[0.06]"
             style={{
               background: 'radial-gradient(circle, #d97706 0%, #b45309 50%, transparent 80%)',
             }}
           />
           <div
-            className="absolute bottom-10 right-10 w-[500px] h-[500px] rounded-full blur-[170px] opacity-[0.05]"
+            className="hidden sm:block absolute bottom-10 right-10 w-[500px] h-[500px] rounded-full blur-[170px] opacity-[0.05]"
             style={{
               background: 'radial-gradient(circle, #b45309 0%, #78350f 40%, transparent 80%)',
             }}

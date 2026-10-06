@@ -43,9 +43,14 @@ export const Header: React.FC<HeaderProps> = ({ isClosed = false }) => {
     }
 
     const sectionIds = ['hero', 'projects', 'tech', 'titikSpotify', 'rating', 'contact'];
+    let lastSection = 'hero';
+    let rafId: number | null = null;
 
     const handleScroll = () => {
-      const scrollY = window.scrollY;
+      if (rafId !== null) return;
+      rafId = requestAnimationFrame(() => {
+        rafId = null;
+        const scrollY = window.scrollY;
       const windowHeight = window.innerHeight;
       const docHeight = document.documentElement.scrollHeight;
 
@@ -75,7 +80,11 @@ export const Header: React.FC<HeaderProps> = ({ isClosed = false }) => {
         }
       }
 
-      setActiveSection(current);
+        if (lastSection !== current) {
+          lastSection = current;
+          setActiveSection(current);
+        }
+      });
     };
 
     handleScroll();
@@ -85,6 +94,7 @@ export const Header: React.FC<HeaderProps> = ({ isClosed = false }) => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleScroll);
+      if (rafId !== null) cancelAnimationFrame(rafId);
     };
   }, [pathname]);
 

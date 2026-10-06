@@ -93,9 +93,9 @@ const TypewriterTagline: React.FC<{ phrases: string[] }> = ({ phrases }) => {
   }, [displayText, isDeleting, phraseIdx, phrases]);
 
   return (
-    <div className="w-full flex items-center justify-start text-left">
-      <span className="inline-block text-xs sm:text-sm md:text-base font-normal text-zinc-300 font-poppins text-left">
-        {displayText}<span className="inline-block w-[2px] sm:w-[2.5px] h-[1.12em] -ml-[1px] bg-amber-400 align-baseline animate-cursor-blink" />
+    <div className="w-full flex items-center justify-center text-center">
+      <span className="inline-block text-xs sm:text-sm md:text-base font-normal text-zinc-300 font-poppins text-center">
+        {displayText}<span className="inline-block w-[2px] sm:w-[2.5px] h-[1.12em] ml-0.5 bg-amber-400 align-baseline animate-cursor-blink" />
       </span>
     </div>
   );
@@ -174,9 +174,6 @@ export const CurtainHero: React.FC<CurtainHeroProps> = ({ onScrollProgress }) =>
         bg.style.filter = 'brightness(1)';
       }
       setShowResetBtn(false);
-      if (onScrollProgress) {
-        onScrollProgress(0, false);
-      }
     };
 
     if (reduceMotion) {
@@ -338,18 +335,33 @@ export const CurtainHero: React.FC<CurtainHeroProps> = ({ onScrollProgress }) =>
       }
     };
 
+    let lastClosedMobile: boolean | null = null;
+    let isMobileMode = checkIsMobile();
+
     const handleScroll = () => {
-      if (checkIsMobile()) {
-        resetToStaticHero();
-        const currentY = window.scrollY;
-        if (onScrollProgress) {
-          onScrollProgress(currentY > 80 ? 1 : 0, currentY > 80);
+      const isMobileNow = checkIsMobile();
+      if (isMobileNow) {
+        if (!isMobileMode) {
+          isMobileMode = true;
+          resetToStaticHero();
+        }
+        const isClosed = window.scrollY > 80;
+        if (lastClosedMobile !== isClosed) {
+          lastClosedMobile = isClosed;
+          if (onScrollProgress) {
+            onScrollProgress(isClosed ? 1 : 0, isClosed);
+          }
         }
         return;
       }
 
+      if (isMobileMode) {
+        isMobileMode = false;
+      }
+
       const currentY = window.scrollY;
-      setShowResetBtn(currentY > 150);
+      const shouldShow = currentY > 150;
+      setShowResetBtn((prev) => (prev !== shouldShow ? shouldShow : prev));
 
       targetP = computeTargetP();
       if (!isRunning) {
@@ -360,8 +372,10 @@ export const CurtainHero: React.FC<CurtainHeroProps> = ({ onScrollProgress }) =>
 
     if (checkIsMobile()) {
       resetToStaticHero();
+      const initialClosed = window.scrollY > 80;
+      lastClosedMobile = initialClosed;
       if (onScrollProgress) {
-        onScrollProgress(window.scrollY > 80 ? 1 : 0, window.scrollY > 80);
+        onScrollProgress(initialClosed ? 1 : 0, initialClosed);
       }
     } else {
       // Inisialisasi posisi awal tanpa hentakan pada desktop
@@ -425,10 +439,10 @@ export const CurtainHero: React.FC<CurtainHeroProps> = ({ onScrollProgress }) =>
             })()}
           </h1>
 
-          {/* Tagline with Left-to-Right Typewriter Effect (Cursor moves from left to right) */}
+          {/* Tagline with Center Typewriter Effect */}
           <div
             ref={taglineRef}
-            className="mt-4 sm:mt-5 min-h-[3rem] sm:min-h-[2.5rem] w-full max-w-xl mx-auto flex items-center justify-start text-left px-4 will-change-transform transition-all duration-200"
+            className="mt-4 sm:mt-5 min-h-[3rem] sm:min-h-[2.5rem] w-full max-w-2xl mx-auto flex items-center justify-center text-center px-4 will-change-transform transition-all duration-200"
           >
             <TypewriterTagline phrases={phrases} />
           </div>

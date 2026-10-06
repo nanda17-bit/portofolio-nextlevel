@@ -113,28 +113,26 @@ export const RunningLogoSection: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (!isInView) return;
+    if (!isInView || (typeof window !== 'undefined' && window.innerWidth < 768)) return;
     let animId: number;
     let lastTime = performance.now();
 
     const loop = (now: number) => {
+      if (window.innerWidth < 768) return;
       const dt = Math.min((now - lastTime) / 1000, 0.1);
       lastTime = now;
 
-      // Only compute orbital math on desktop (width >= 768)
-      if (window.innerWidth >= 768) {
-        // Faster, energetic orbital motion as requested (~0.18 rad/s)
-        const speed = 0.18;
+      // Faster, energetic orbital motion on desktop (~0.18 rad/s)
+      const speed = 0.18;
 
-        if (!leftAnimRef.current.isPaused) {
-          leftAnimRef.current.offset = (leftAnimRef.current.offset + speed * dt) % (2 * Math.PI);
-          setLeftOffset(leftAnimRef.current.offset);
-        }
+      if (!leftAnimRef.current.isPaused) {
+        leftAnimRef.current.offset = (leftAnimRef.current.offset + speed * dt) % (2 * Math.PI);
+        setLeftOffset(leftAnimRef.current.offset);
+      }
 
-        if (!rightAnimRef.current.isPaused) {
-          rightAnimRef.current.offset = (rightAnimRef.current.offset + speed * dt) % (2 * Math.PI);
-          setRightOffset(rightAnimRef.current.offset);
-        }
+      if (!rightAnimRef.current.isPaused) {
+        rightAnimRef.current.offset = (rightAnimRef.current.offset + speed * dt) % (2 * Math.PI);
+        setRightOffset(rightAnimRef.current.offset);
       }
 
       animId = requestAnimationFrame(loop);
@@ -430,10 +428,10 @@ export const RunningLogoSection: React.FC = () => {
 
           {/* Photo Card Container */}
           <div
-            className={`relative w-[150px] h-[190px] rounded-3xl overflow-hidden border-2 transition-all duration-300 backdrop-blur-md shadow-2xl ${
+            className={`relative w-[150px] h-[190px] rounded-3xl overflow-hidden border-2 transition-all duration-300 shadow-2xl ${
               isDark
-                ? 'bg-zinc-950/70 border-cyan-500/30 shadow-black'
-                : 'bg-white/80 border-cyan-500/30 shadow-xl'
+                ? 'bg-zinc-950 border-cyan-500/30 shadow-black'
+                : 'bg-white border-cyan-500/30 shadow-xl'
             }`}
           >
             <img
@@ -483,16 +481,16 @@ export const RunningLogoSection: React.FC = () => {
               className="flex gap-2.5 w-max animate-marquee"
               style={{ animationDuration: '30s' }}
             >
-              {[...leftTech, ...leftTech, ...leftTech, ...leftTech].map((tech, idx) => (
+              {[...leftTech, ...leftTech].map((tech, idx) => (
                 <div
                   key={`mob-l-${tech.id}-${idx}`}
                   style={{
                     borderColor: tech.color ? `${tech.color}45` : undefined,
                   }}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border backdrop-blur-md transition-all shadow-md flex-shrink-0 ${
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border transform-gpu [backface-visibility:hidden] transition-colors shadow-sm flex-shrink-0 ${
                     isDark
-                      ? 'bg-[#0f0f11]/90 text-zinc-200 border-white/10'
-                      : 'bg-white/95 text-zinc-800 border-zinc-200'
+                      ? 'bg-[#111114] text-zinc-200 border-white/10'
+                      : 'bg-white text-zinc-800 border-zinc-200'
                   }`}
                 >
                   <div
@@ -518,16 +516,16 @@ export const RunningLogoSection: React.FC = () => {
               className="flex gap-2.5 w-max animate-marquee-reverse"
               style={{ animationDuration: '30s' }}
             >
-              {[...rightTech, ...rightTech, ...rightTech, ...rightTech].map((tech, idx) => (
+              {[...rightTech, ...rightTech].map((tech, idx) => (
                 <div
                   key={`mob-r-${tech.id}-${idx}`}
                   style={{
                     borderColor: tech.color ? `${tech.color}45` : undefined,
                   }}
-                  className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border backdrop-blur-md transition-all shadow-md flex-shrink-0 ${
+                  className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border transform-gpu [backface-visibility:hidden] transition-colors shadow-sm flex-shrink-0 ${
                     isDark
-                      ? 'bg-[#0f0f11]/90 text-zinc-200 border-white/10'
-                      : 'bg-white/95 text-zinc-800 border-zinc-200'
+                      ? 'bg-[#111114] text-zinc-200 border-white/10'
+                      : 'bg-white text-zinc-800 border-zinc-200'
                   }`}
                 >
                   <div

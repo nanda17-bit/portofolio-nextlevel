@@ -36,24 +36,24 @@ body {
   font-family: var(--font-poppins);
 }
 
-/* Slower, smoother Marquee infinite loop */
+/* Slower, smoother GPU-accelerated Marquee infinite loop */
 @keyframes marquee {
   0% {
-    transform: translateX(0%);
+    transform: translate3d(0, 0, 0);
   }
 
   100% {
-    transform: translateX(-50%);
+    transform: translate3d(-50%, 0, 0);
   }
 }
 
 @keyframes marquee-reverse {
   0% {
-    transform: translateX(-50%);
+    transform: translate3d(-50%, 0, 0);
   }
 
   100% {
-    transform: translateX(0%);
+    transform: translate3d(0, 0, 0);
   }
 }
 
@@ -61,12 +61,18 @@ body {
   animation: marquee 68s linear infinite;
   display: flex;
   width: max-content;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 .animate-marquee-reverse {
   animation: marquee-reverse 68s linear infinite;
   display: flex;
   width: max-content;
+  will-change: transform;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
 }
 
 /* Explicit Hover Pause per row */

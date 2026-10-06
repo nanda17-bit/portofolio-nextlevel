@@ -6,13 +6,15 @@ import { usePortfolio } from '@/context/PortfolioContext';
 export const CursorGlow: React.FC = () => {
   const glowRef = useRef<HTMLDivElement>(null);
   const [isVisible, setIsVisible] = useState(false);
+  const [hasPointer, setHasPointer] = useState(false);
   const { theme } = usePortfolio();
   const isDark = theme === 'dark';
 
   useEffect(() => {
     // Only activate on devices with fine pointer (mouse/trackpad)
-    const hasPointer = window.matchMedia('(pointer: fine)').matches;
-    if (!hasPointer) return;
+    const pointerMatches = window.matchMedia('(pointer: fine)').matches;
+    if (!pointerMatches) return;
+    setHasPointer(true);
 
     let mouseX = -500;
     let mouseY = -500;
@@ -23,7 +25,7 @@ export const CursorGlow: React.FC = () => {
     const handleMouseMove = (e: MouseEvent) => {
       mouseX = e.clientX;
       mouseY = e.clientY;
-      if (!isVisible) setIsVisible(true);
+      setIsVisible(true);
     };
 
     const handleMouseLeave = () => {
@@ -57,7 +59,9 @@ export const CursorGlow: React.FC = () => {
       document.removeEventListener('mouseenter', handleMouseEnter);
       cancelAnimationFrame(animId);
     };
-  }, [isVisible]);
+  }, []);
+
+  if (!hasPointer) return null;
 
   return (
     <div

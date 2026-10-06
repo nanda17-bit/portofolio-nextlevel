@@ -104,13 +104,19 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     }
   }, []);
 
-  // Save to localStorage when data changes (after hydration)
+  // Save to localStorage & server DB when data changes (after hydration)
   useEffect(() => {
     if (!isHydrated) return;
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      // Persist to server portfolio-db.json
+      fetch('/api/portfolio-data', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ type: 'save_data', data }),
+      }).catch(() => {});
     } catch (e) {
-      console.error('Failed to save portfolio data to local storage:', e);
+      console.error('Failed to save portfolio data:', e);
     }
   }, [data, isHydrated]);
 

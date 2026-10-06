@@ -50,6 +50,19 @@ export async function POST(req: Request) {
       return NextResponse.json({ success: true, message: newMessage });
     }
 
+    if (body.type === 'save_data' || body.type === 'update_all') {
+      const updatedData = body.data;
+      if (updatedData && typeof updatedData === 'object') {
+        const merged = {
+          ...data,
+          ...updatedData,
+          messages: Array.isArray(updatedData.messages) ? updatedData.messages : data.messages || [],
+        };
+        fs.writeFileSync(DB_PATH, JSON.stringify(merged, null, 2), 'utf8');
+        return NextResponse.json({ success: true, data: merged });
+      }
+    }
+
     return NextResponse.json({ error: 'Unsupported operation' }, { status: 400 });
   } catch (err: any) {
     console.error('API Error in /api/portfolio-data:', err);
