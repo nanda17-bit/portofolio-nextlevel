@@ -29,8 +29,8 @@ interface PortfolioContextType {
   isHydrated: boolean;
 }
 
-const STORAGE_KEY = 'baliqdev_store_v4';
-const THEME_KEY = 'baliqdev_theme_v4';
+const STORAGE_KEY = 'baliqdev_store_v5';
+const THEME_KEY = 'baliqdev_theme_v5';
 
 const PortfolioContext = createContext<PortfolioContextType | undefined>(undefined);
 
@@ -47,6 +47,7 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         localStorage.removeItem('iqbal_portfolio_data_v1');
         localStorage.removeItem('portfolio_data_v1');
         localStorage.removeItem('portfolio_data_v3');
+        localStorage.removeItem('baliqdev_store_v4');
       }
 
       const savedData = localStorage.getItem(STORAGE_KEY);
@@ -78,25 +79,33 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
         setTheme('dark');
       }
 
-      // Sync fresh data from shared portfolio-db.json API
-      fetch('/api/portfolio-data')
-        .then((res) => (res.ok ? res.json() : null))
-        .then((remoteData) => {
-          if (remoteData && typeof remoteData === 'object') {
-            setData((prev) => ({
-              ...DEFAULT_PORTFOLIO_DATA,
-              ...remoteData,
-              projects: Array.isArray(remoteData.projects) ? remoteData.projects : prev.projects,
-              techStack: Array.isArray(remoteData.techStack) ? remoteData.techStack : prev.techStack,
-              songs: Array.isArray(remoteData.songs) ? remoteData.songs : prev.songs,
-              messages: Array.isArray(remoteData.messages) ? remoteData.messages : prev.messages,
-            }));
-            try {
-              localStorage.setItem(STORAGE_KEY, JSON.stringify(remoteData));
-            } catch {}
-          }
-        })
-        .catch(() => {});
+      // Sync fresh data from MySQL / REST API without cache
+      const fetchFreshData = () => {
+        fetch('/api/portfolio-data?t=' + Date.now(), { cache: 'no-store' })
+          .then((res) => (res.ok ? res.json() : null))
+          .then((remoteData) => {
+            if (remoteData && typeof remoteData === 'object' && Array.isArray(remoteData.projects)) {
+              setData((prev) => ({
+                ...DEFAULT_PORTFOLIO_DATA,
+                ...remoteData,
+                projects: remoteData.projects,
+                techStack: remoteData.techStack || prev.techStack,
+                songs: remoteData.songs || prev.songs,
+                messages: remoteData.messages || prev.messages,
+              }));
+              try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(remoteData));
+              } catch {}
+            }
+          })
+          .catch(() => {});
+      };
+
+      fetchFreshData();
+
+      const handleFocus = () => fetchFreshData();
+      window.addEventListener('focus', handleFocus);
+      return () => window.removeEventListener('focus', handleFocus);
     } catch (e) {
       console.warn('Failed to load local storage data:', e);
     } finally {
@@ -104,19 +113,13 @@ export const PortfolioProvider: React.FC<{ children: React.ReactNode }> = ({ chi
     }
   }, []);
 
-  // Save to localStorage & server DB when data changes (after hydration)
+  // Save to localStorage for offline cache
   useEffect(() => {
     if (!isHydrated) return;
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-      // Persist to server portfolio-db.json
-      fetch('/api/portfolio-data', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ type: 'save_data', data }),
-      }).catch(() => {});
     } catch (e) {
-      console.error('Failed to save portfolio data:', e);
+      console.error('Failed to save local storage data:', e);
     }
   }, [data, isHydrated]);
 

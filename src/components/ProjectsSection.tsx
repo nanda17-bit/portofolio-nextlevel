@@ -5,7 +5,14 @@ import Link from 'next/link';
 import { usePortfolio } from '@/context/PortfolioContext';
 import { ProjectItem } from '@/types/portfolio';
 import { ProjectModal } from './ProjectModal';
-import { ArrowRight, FolderGit2 } from 'lucide-react';
+import {
+  ArrowRight,
+  FolderGit2,
+  ChevronLeft,
+  ChevronRight,
+  LayoutGrid,
+  Layers,
+} from 'lucide-react';
 
 export const ProjectsSection: React.FC = () => {
   const { data, theme } = usePortfolio();
@@ -15,10 +22,12 @@ export const ProjectsSection: React.FC = () => {
 
   const [inView, setInView] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+  const [activeMobileIndex, setActiveMobileIndex] = useState(0);
   const [spreadProgress, setSpreadProgress] = useState(0);
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
   const carouselRef = useRef<HTMLDivElement>(null);
+  const mobileScrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -88,9 +97,15 @@ export const ProjectsSection: React.FC = () => {
 
   const isDark = theme === 'dark';
   const allProjects = data?.projects || [];
-  // Only pinned projects (max 5) show on the landing page
-  const pinnedList = allProjects.filter((p) => p.pinned === true);
-  const projects = pinnedList.slice(0, 5);
+  // Proyek yang tampil di Landing Page (maksimal 5):
+  // 1. Prioritas proyek yang di-pin atau featured
+  const pinnedList = allProjects.filter(
+    (p) => p.pinned === true || (p.pinned === undefined && p.featured === true)
+  );
+  // 2. Proyek lainnya (unpinned / newly added)
+  const unpinnedList = allProjects.filter((p) => !pinnedList.some((pinned) => pinned.id === p.id));
+  // 3. Gabungkan: pinned terlebih dahulu, lalu proyek terbaru hingga 5 kartu
+  const projects = (pinnedList.length > 0 ? [...pinnedList, ...unpinnedList] : allProjects).slice(0, 5);
   const totalCount = allProjects.length;
 
   // Animated counter for project number
@@ -153,34 +168,102 @@ export const ProjectsSection: React.FC = () => {
     };
   };
 
+  const scrollMobileTo = (index: number) => {
+    if (!mobileScrollRef.current) return;
+    const container = mobileScrollRef.current;
+    const targetChild = container.children[index] as HTMLElement;
+    if (targetChild) {
+      const scrollPos = targetChild.offsetLeft - (container.clientWidth - targetChild.clientWidth) / 2;
+      container.scrollTo({
+        left: Math.max(0, scrollPos),
+        behavior: 'smooth',
+      });
+      setActiveMobileIndex(index);
+    }
+  };
+
+  const handleMobileScroll = () => {
+    if (!mobileScrollRef.current) return;
+    const container = mobileScrollRef.current;
+    const containerCenter = container.scrollLeft + container.clientWidth / 2;
+    let closestIndex = 0;
+    let minDistance = Infinity;
+
+    Array.from(container.children).forEach((child, idx) => {
+      const el = child as HTMLElement;
+      const childCenter = el.offsetLeft + el.clientWidth / 2;
+      const distance = Math.abs(containerCenter - childCenter);
+      if (distance < minDistance) {
+        minDistance = distance;
+        closestIndex = idx;
+      }
+    });
+
+    if (closestIndex !== activeMobileIndex) {
+      setActiveMobileIndex(closestIndex);
+    }
+  };
+
   return (
     <section
       id="projects"
       ref={sectionRef}
-      className="relative z-10 py-16 sm:py-24 md:py-28 px-6 sm:px-8 md:px-10 lg:px-12 max-w-7xl mx-auto overflow-visible select-none"
+      className="relative z-10 py-16 sm:py-24 md:py-28 px-4 sm:px-8 md:px-10 lg:px-12 max-w-7xl mx-auto overflow-visible select-none"
     >
-      {/* Section Header - Left aligned with comfortable natural indent & fade in from below */}
+      {/* Section Header */}
       <div
         ref={headerRef}
-        className={`mb-8 sm:mb-12 text-left transition-all duration-1000 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] will-change-transform ${
+        className={`mb-8 sm:mb-12 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5 text-left transition-all duration-1000 [transition-timing-function:cubic-bezier(0.16,1,0.3,1)] will-change-transform ${
           inView || isMobile ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-20'
         }`}
       >
-        <h2 className={`font-montserrat font-extrabold text-4xl sm:text-6xl md:text-7xl tracking-tight leading-none inline-flex items-baseline ${isDark ? 'text-white' : 'text-zinc-900'}`}>
-          <span>
-            <span className="text-amber-500">{displayCount}</span> Project<span
-              aria-hidden="true"
-              className="inline-block w-[3px] sm:w-[4px] md:w-[5px] h-[0.78em] -ml-[1px] sm:-ml-[2px] bg-amber-500 rounded-[1px] animate-cursor-blink align-baseline"
-            />
-          </span>
-        </h2>
+        <div>
+          <h2 className={`font-montserrat font-extrabold text-4xl sm:text-6xl md:text-7xl tracking-tight leading-none inline-flex items-baseline ${isDark ? 'text-white' : 'text-zinc-900'}`}>
+            <span>
+              <span className="text-amber-500">{displayCount}</span> Project<span
+                aria-hidden="true"
+                className="inline-block w-[3px] sm:w-[4px] md:w-[5px] h-[0.78em] -ml-[1px] sm:-ml-[2px] bg-amber-500 rounded-[1px] animate-cursor-blink align-baseline"
+              />
+            </span>
+          </h2>
 
-        <div className="mt-3 sm:mt-4 text-xs sm:text-sm md:text-base text-zinc-400 font-poppins font-normal">
-          <span>
-            <span className="text-amber-500 font-medium">created</span> and succesfully get{' '}
-            <span className="text-amber-500 font-semibold">5 star</span>
-          </span>
+          <div className="mt-3 sm:mt-4 text-xs sm:text-sm md:text-base text-zinc-400 font-poppins font-normal">
+            <span>
+              <span className="text-amber-500 font-medium">created</span> and succesfully get{' '}
+              <span className="text-amber-500 font-semibold">5 star</span>
+            </span>
+          </div>
         </div>
+
+        {/* View Mode Switcher (Carousel vs Grid) */}
+        {projects.length > 0 && (
+          <div className="flex items-center gap-1.5 p-1 rounded-full bg-zinc-900/90 border border-white/10 backdrop-blur-md self-start sm:self-auto shadow-lg">
+            <button
+              type="button"
+              onClick={() => setViewMode('fan')}
+              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono transition-all ${
+                viewMode === 'fan'
+                  ? 'bg-amber-500 text-black font-semibold shadow-[0_0_15px_rgba(245,158,11,0.4)]'
+                  : 'text-zinc-400 hover:text-white'
+              }`}
+            >
+              <Layers className="w-3.5 h-3.5" />
+              <span>Sorotan</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewMode('grid')}
+              className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-mono transition-all ${
+                viewMode === 'grid'
+                  ? 'bg-amber-500 text-black font-semibold shadow-[0_0_15px_rgba(245,158,11,0.4)]'
+                  : 'text-zinc-400 hover:text-white'
+              }`}
+            >
+              <LayoutGrid className="w-3.5 h-3.5" />
+              <span>Tampilkan Semua ({projects.length})</span>
+            </button>
+          </div>
+        )}
       </div>
 
       {/* When 0 projects: Display clean 'Belum memiliki project' empty state */}
@@ -348,10 +431,14 @@ export const ProjectsSection: React.FC = () => {
           </div>
 
           {/* Mobile Swipeable Card Carousel */}
-          <div className="md:hidden flex overflow-x-auto gap-4 px-2 py-4 no-scrollbar snap-x snap-mandatory">
+          <div
+            ref={mobileScrollRef}
+            onScroll={handleMobileScroll}
+            className="md:hidden flex overflow-x-auto gap-4 px-4 py-4 no-scrollbar snap-x snap-mandatory scroll-smooth"
+            style={{ WebkitOverflowScrolling: 'touch' }}
+          >
             {projects.map((project, idx) => {
-              const centerIndex = Math.floor((Math.min(projects.length, 5) - 1) / 2);
-              const isCenter = idx === centerIndex;
+              const isActive = idx === activeMobileIndex;
               const isHovered = hoveredIndex === idx;
 
               return (
@@ -363,23 +450,28 @@ export const ProjectsSection: React.FC = () => {
                   style={{
                     filter: !inView && !isMobile ? 'blur(4px)' : 'none',
                     opacity: !inView && !isMobile ? 0 : 1,
-                    transform: !inView && !isMobile ? 'translateY(60px)' : isHovered ? 'translateY(-8px) scale(1.03)' : 'translateY(0px)',
+                    transform: !inView && !isMobile
+                      ? 'translateY(60px)'
+                      : isHovered
+                      ? 'translateY(-6px) scale(1.02)'
+                      : 'translateY(0px)',
                     transitionProperty: 'transform, filter, opacity',
-                    transitionDuration: '500ms',
+                    transitionDuration: '400ms',
                     transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
-                    transitionDelay: !inView && !isMobile ? `${idx * 60}ms` : '0ms',
                   }}
-                  className="snap-center flex-shrink-0 w-[260px] h-[370px] relative cursor-pointer"
+                  className="snap-center flex-shrink-0 w-[80vw] max-w-[290px] h-[390px] relative cursor-pointer select-none"
                 >
-                  {isCenter && (
-                    <div className="absolute -inset-2 rounded-[24px] border-2 border-amber-500 pointer-events-none shadow-[0_0_20px_rgba(245,158,11,0.45)]" />
+                  {/* Glowing border indicator on active card */}
+                  {isActive && (
+                    <div className="absolute -inset-1.5 rounded-[22px] border-2 border-amber-500 pointer-events-none shadow-[0_0_24px_rgba(245,158,11,0.55)] z-10" />
                   )}
 
                   <div
-                    className={`relative w-full h-full rounded-2xl overflow-hidden border shadow-xl ${isDark
-                      ? 'border-white/10 bg-[#050505]'
-                      : 'border-black/10 bg-white'
-                      } ${isCenter ? 'border-amber-500/80' : ''}`}
+                    className={`relative w-full h-full rounded-2xl overflow-hidden border shadow-xl transition-all duration-300 ${
+                      isDark
+                        ? 'border-white/10 bg-[#050505]'
+                        : 'border-black/10 bg-white'
+                    } ${isActive ? 'border-amber-500/80 ring-1 ring-amber-500/40' : ''}`}
                   >
                     <img
                       src={project.imageUrl}
@@ -387,14 +479,35 @@ export const ProjectsSection: React.FC = () => {
                       className="w-full h-full object-cover"
                     />
                     <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
-                    <div className="absolute top-3 left-3">
-                      <span className="px-2 py-0.5 rounded-full text-[10px] font-medium bg-black/70 text-zinc-300 border border-white/10">
+                    
+                    {/* Top Badges */}
+                    <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-black/75 backdrop-blur-sm text-zinc-200 border border-white/15">
                         {project.category}
                       </span>
+                      {project.year && (
+                        <span className="text-[10px] font-mono text-zinc-400 bg-black/60 px-2 py-0.5 rounded">
+                          {project.year}
+                        </span>
+                      )}
                     </div>
+
+                    {/* Bottom Card Content */}
                     <div className="absolute bottom-0 inset-x-0 p-4 text-white flex flex-col gap-1.5">
-                      <h3 className="font-bold text-sm">{project.title}</h3>
+                      <h3 className="font-bold text-sm leading-snug drop-shadow line-clamp-1">{project.title}</h3>
                       <p className="text-xs text-zinc-300 line-clamp-2">{project.description}</p>
+                      
+                      <div className="flex flex-wrap gap-1 mt-0.5">
+                        {project.tags.slice(0, 2).map((tag, tIdx) => (
+                          <span
+                            key={tIdx}
+                            className="px-2 py-0.5 rounded text-[9px] font-mono bg-white/10 text-zinc-300"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+
                       <div className="flex items-center justify-between pt-2 text-xs text-amber-500 font-medium">
                         <span>Lihat Rincian</span>
                         <ArrowRight className="h-3.5 w-3.5" />
@@ -404,6 +517,68 @@ export const ProjectsSection: React.FC = () => {
                 </div>
               );
             })}
+          </div>
+
+          {/* Mobile Navigation Controls & Dots */}
+          <div className="md:hidden mt-4 flex flex-col items-center gap-3">
+            {/* Arrows & Counter */}
+            <div className="flex items-center justify-between w-full max-w-[320px] px-2">
+              <button
+                type="button"
+                onClick={() => scrollMobileTo(Math.max(0, activeMobileIndex - 1))}
+                disabled={activeMobileIndex === 0}
+                aria-label="Proyek sebelumnya"
+                className="p-2 rounded-full border border-white/15 bg-zinc-900/90 text-zinc-200 disabled:opacity-25 disabled:cursor-not-allowed hover:border-amber-500/50 hover:text-white transition-all shadow-md active:scale-95"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+
+              <div className="flex flex-col items-center text-center">
+                <span className="text-xs font-mono text-zinc-200 font-medium">
+                  Proyek <span className="text-amber-500 font-bold">{activeMobileIndex + 1}</span> dari <span className="font-bold">{projects.length}</span>
+                </span>
+                <span className="text-[10px] text-zinc-400 font-normal truncate max-w-[180px]">
+                  {projects[activeMobileIndex]?.title}
+                </span>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => scrollMobileTo(Math.min(projects.length - 1, activeMobileIndex + 1))}
+                disabled={activeMobileIndex === projects.length - 1}
+                aria-label="Proyek selanjutnya"
+                className="p-2 rounded-full border border-white/15 bg-zinc-900/90 text-zinc-200 disabled:opacity-25 disabled:cursor-not-allowed hover:border-amber-500/50 hover:text-white transition-all shadow-md active:scale-95"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Pagination Dots */}
+            <div className="flex items-center gap-2 py-0.5">
+              {projects.map((p, i) => (
+                <button
+                  key={p.id || i}
+                  type="button"
+                  onClick={() => scrollMobileTo(i)}
+                  aria-label={`Buka proyek ${i + 1}: ${p.title}`}
+                  className={`h-2 transition-all duration-300 rounded-full ${
+                    i === activeMobileIndex
+                      ? 'w-7 bg-amber-500 shadow-[0_0_10px_rgba(245,158,11,0.7)]'
+                      : 'w-2 bg-white/20 hover:bg-white/40'
+                  }`}
+                />
+              ))}
+            </div>
+
+            {/* Quick Switch to Grid view for users who want all projects at once */}
+            <button
+              type="button"
+              onClick={() => setViewMode('grid')}
+              className="mt-1 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-400 text-[11px] font-mono hover:bg-amber-500/20 active:scale-95 transition-all"
+            >
+              <LayoutGrid className="w-3.5 h-3.5" />
+              <span>Tampilkan Semua {projects.length} Proyek Sekaligus (Grid)</span>
+            </button>
           </div>
 
           {/* Link ke Halaman Semua Proyek */}
@@ -426,58 +601,88 @@ export const ProjectsSection: React.FC = () => {
         </div>
       ) : (
         /* Grid View */
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {projects.map((project, idx) => {
-            const isHovered = hoveredIndex === idx;
+        <div className="flex flex-col gap-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {projects.map((project, idx) => {
+              const isHovered = hoveredIndex === idx;
 
-            return (
-              <div
-                key={project.id}
-                onMouseEnter={() => setHoveredIndex(idx)}
-                onMouseLeave={() => setHoveredIndex(null)}
-                onClick={() => setSelectedProject(project)}
-                className={`rounded-2xl overflow-hidden border cursor-pointer transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-2xl ${isDark
-                  ? 'bg-[#080808] border-white/10 hover:border-amber-600/40'
-                  : 'bg-white border-zinc-200 hover:border-amber-500 shadow-sm'
+              return (
+                <div
+                  key={project.id}
+                  onMouseEnter={() => setHoveredIndex(idx)}
+                  onMouseLeave={() => setHoveredIndex(null)}
+                  onClick={() => setSelectedProject(project)}
+                  className={`group rounded-2xl overflow-hidden border cursor-pointer transition-all duration-300 hover:-translate-y-1.5 hover:scale-[1.01] hover:shadow-2xl ${
+                    isDark
+                      ? 'bg-[#080808] border-white/10 hover:border-amber-500/50'
+                      : 'bg-white border-zinc-200 hover:border-amber-500 shadow-sm'
                   }`}
-              >
-                <div className="relative h-48 w-full overflow-hidden bg-zinc-900">
-                  <img
-                    src={project.imageUrl}
-                    alt={project.title}
-                    className="w-full h-full object-cover"
-                  />
-                  <div className="absolute top-3 left-3">
-                    <span className="px-2.5 py-0.5 rounded-full text-[11px] font-medium bg-black/70 text-zinc-300 border border-white/10">
-                      {project.category}
-                    </span>
-                  </div>
-                </div>
-
-                <div className="p-5 flex flex-col gap-2">
-                  <h3 className={`text-base font-bold tracking-tight ${isDark ? 'text-zinc-100' : 'text-zinc-900'}`}>
-                    {project.title}
-                  </h3>
-
-                  <p className={`text-xs line-clamp-2 leading-relaxed ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
-                    {project.description}
-                  </p>
-
-                  <div className="flex flex-wrap gap-1.5 pt-2">
-                    {project.tags.map((tag, i) => (
-                      <span
-                        key={i}
-                        className={`px-2 py-0.5 rounded text-[10px] font-mono ${isDark ? 'bg-white/5 text-zinc-300 border border-white/10' : 'bg-zinc-100 text-zinc-700 border border-zinc-200'
-                          }`}
-                      >
-                        {tag}
+                >
+                  <div className="relative h-48 w-full overflow-hidden bg-zinc-900">
+                    <img
+                      src={project.imageUrl}
+                      alt={project.title}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
+                    <div className="absolute top-3 left-3 right-3 flex items-center justify-between">
+                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-medium bg-black/75 backdrop-blur-sm text-zinc-200 border border-white/15">
+                        {project.category}
                       </span>
-                    ))}
+                      {project.year && (
+                        <span className="text-[10px] font-mono text-zinc-400 bg-black/60 px-2 py-0.5 rounded">
+                          {project.year}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="p-5 flex flex-col gap-2.5">
+                    <h3 className={`text-base font-bold tracking-tight line-clamp-1 ${isDark ? 'text-zinc-100 group-hover:text-amber-400' : 'text-zinc-900 group-hover:text-amber-600'} transition-colors`}>
+                      {project.title}
+                    </h3>
+
+                    <p className={`text-xs line-clamp-2 leading-relaxed ${isDark ? 'text-zinc-400' : 'text-zinc-600'}`}>
+                      {project.description}
+                    </p>
+
+                    <div className="flex flex-wrap gap-1.5 pt-1">
+                      {project.tags.map((tag, i) => (
+                        <span
+                          key={i}
+                          className={`px-2 py-0.5 rounded text-[10px] font-mono ${
+                            isDark ? 'bg-white/5 text-zinc-300 border border-white/10' : 'bg-zinc-100 text-zinc-700 border border-zinc-200'
+                          }`}
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+
+                    <div className="pt-2 flex items-center justify-between text-xs text-amber-500 font-medium">
+                      <span>Lihat Rincian</span>
+                      <ArrowRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-1" />
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
+
+          {/* Link ke Halaman Semua Proyek */}
+          <div className="flex flex-col items-center justify-center gap-2.5">
+            <Link
+              href="/projects"
+              style={{ '--btn-fill-bg': '#d97706' } as React.CSSProperties}
+              className="btn-fill-effect group inline-flex items-center gap-3 px-8 py-3.5 rounded-full border border-white/20 bg-zinc-950/80 text-zinc-100 text-xs sm:text-sm font-mono tracking-wider hover:text-white hover:border-amber-500/50 shadow-xl backdrop-blur-md transition-all cursor-pointer"
+            >
+              <span>Buka Arsip Lengkap Proyek ({allProjects.length})</span>
+              <ArrowRight className="h-4 w-4 text-amber-500 transition-transform group-hover:translate-x-1" />
+            </Link>
+            <span className="text-[11px] font-mono text-zinc-500 text-center">
+              Lihat rilis terbaru format persegi panjang &amp; filter kategori lengkap
+            </span>
+          </div>
         </div>
       )}
 

@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { usePortfolio } from '@/context/PortfolioContext';
 import { Mail, Phone, MapPin, Send, CheckCircle2 } from 'lucide-react';
-import { GithubIcon, LinkedinIcon, InstagramIcon, TwitterIcon } from '@/components/SocialIcons';
+import { SocialPlatformIcon, getSocialPlatformDetails } from '@/components/SocialIcons';
 
 export const ContactSection: React.FC = () => {
   const { data, theme, submitMessage } = usePortfolio();
@@ -18,6 +18,30 @@ export const ContactSection: React.FC = () => {
 
   const isDark = theme === 'dark';
   const { contact } = data;
+
+  const activeSocials = React.useMemo(() => {
+    if (Array.isArray(contact?.socialLinks) && contact.socialLinks.length > 0) {
+      return contact.socialLinks
+        .filter((item) => item.enabled !== false && item.url && item.url.trim() !== '')
+        .map((item) => ({
+          platform: item.platform,
+          name: item.name || item.platform,
+          url: item.url,
+        }));
+    }
+
+    if (contact?.socials && typeof contact.socials === 'object') {
+      return Object.entries(contact.socials)
+        .filter(([_, url]) => Boolean(url && typeof url === 'string' && url.trim() !== ''))
+        .map(([platform, url]) => ({
+          platform,
+          name: platform.charAt(0).toUpperCase() + platform.slice(1),
+          url: url as string,
+        }));
+    }
+
+    return [];
+  }, [contact?.socialLinks, contact?.socials]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -66,11 +90,13 @@ export const ContactSection: React.FC = () => {
                 : 'bg-white border-zinc-200 shadow-sm'
             }`}
           >
-            <h3 className={`text-base font-bold mb-5 ${isDark ? 'text-zinc-100' : 'text-zinc-900'}`}>
-              Informasi Langsung
-            </h3>
+            <div className="flex items-center justify-between mb-4">
+              <h3 className={`text-base font-bold ${isDark ? 'text-zinc-100' : 'text-zinc-900'}`}>
+                Informasi Master & Kontak
+              </h3>
+            </div>
 
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3.5">
               {/* Email */}
               <a
                 href={`mailto:${contact.email}`}
@@ -93,7 +119,11 @@ export const ContactSection: React.FC = () => {
 
               {/* Phone / WhatsApp */}
               <a
-                href={`https://wa.me/${contact.phone.replace(/[^0-9]/g, '')}`}
+                href={
+                  contact.whatsapp
+                    ? `https://wa.me/${contact.whatsapp.replace(/[^0-9]/g, '')}`
+                    : `https://wa.me/${contact.phone.replace(/[^0-9]/g, '')}`
+                }
                 target="_blank"
                 rel="noopener noreferrer"
                 className={`flex items-center gap-3 p-3 rounded-xl transition-colors group ${
@@ -119,78 +149,57 @@ export const ContactSection: React.FC = () => {
                   <MapPin className="h-4 w-4" />
                 </div>
                 <div className="flex flex-col">
-                  <span className={`text-[10px] uppercase font-mono ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>Lokasi</span>
+                  <span className={`text-[10px] uppercase font-mono ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>Lokasi & Wilayah</span>
                   <span className={`text-xs sm:text-sm font-medium ${isDark ? 'text-zinc-300' : 'text-zinc-800'}`}>
                     {contact.location}
                   </span>
                 </div>
               </div>
+
+              {/* Address */}
+              {contact.address && (
+                <div className={`flex items-start gap-3 p-3 rounded-xl ${isDark ? 'bg-white/[0.03]' : 'bg-zinc-50 border border-zinc-200/60'}`}>
+                  <div className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-lg ${isDark ? 'bg-white/5 text-amber-400' : 'bg-amber-100 text-amber-700'}`}>
+                    <MapPin className="h-4 w-4" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className={`text-[10px] uppercase font-mono ${isDark ? 'text-zinc-500' : 'text-zinc-400'}`}>Alamat Lengkap</span>
+                    <span className={`text-xs leading-relaxed ${isDark ? 'text-zinc-300' : 'text-zinc-800'}`}>
+                      {contact.address}
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Social links */}
-            <div className="mt-6 pt-5 border-t border-white/10 dark:border-white/10">
-              <span className={`text-[10px] uppercase font-mono block mb-2.5 ${isDark ? 'text-zinc-500' : 'text-zinc-500'}`}>
-                Profil Sosial:
-              </span>
-              <div className="flex items-center gap-2">
-                {contact.socials.github && (
-                  <a
-                    href={contact.socials.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ '--btn-fill-bg': '#d97706' } as React.CSSProperties}
-                    className={`btn-fill-effect p-2.5 rounded-lg border hover:text-white hover:border-amber-500/40 transition-all ${
-                      isDark ? 'bg-white/5 border-white/10 text-zinc-300' : 'bg-zinc-100 border-zinc-200 text-zinc-700'
-                    }`}
-                    title="GitHub"
-                  >
-                    <GithubIcon className="h-4 w-4" />
-                  </a>
-                )}
-                {contact.socials.linkedin && (
-                  <a
-                    href={contact.socials.linkedin}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ '--btn-fill-bg': '#0a66c2' } as React.CSSProperties}
-                    className={`btn-fill-effect p-2.5 rounded-lg border hover:text-white hover:border-blue-500/40 transition-all ${
-                      isDark ? 'bg-white/5 border-white/10 text-zinc-300' : 'bg-zinc-100 border-zinc-200 text-blue-600'
-                    }`}
-                    title="LinkedIn"
-                  >
-                    <LinkedinIcon className="h-4 w-4" />
-                  </a>
-                )}
-                {contact.socials.instagram && (
-                  <a
-                    href={contact.socials.instagram}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ '--btn-fill-bg': '#e1306c' } as React.CSSProperties}
-                    className={`btn-fill-effect p-2.5 rounded-lg border hover:text-white hover:border-pink-500/40 transition-all ${
-                      isDark ? 'bg-white/5 border-white/10 text-zinc-300' : 'bg-zinc-100 border-zinc-200 text-pink-600'
-                    }`}
-                    title="Instagram"
-                  >
-                    <InstagramIcon className="h-4 w-4" />
-                  </a>
-                )}
-                {contact.socials.twitter && (
-                  <a
-                    href={contact.socials.twitter}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ '--btn-fill-bg': '#1d9bf0' } as React.CSSProperties}
-                    className={`btn-fill-effect p-2.5 rounded-lg border hover:text-white hover:border-sky-500/40 transition-all ${
-                      isDark ? 'bg-white/5 border-white/10 text-zinc-300' : 'bg-zinc-100 border-zinc-200 text-sky-600'
-                    }`}
-                    title="Twitter / X"
-                  >
-                    <TwitterIcon className="h-4 w-4" />
-                  </a>
-                )}
+            {activeSocials.length > 0 && (
+              <div className="mt-5 pt-4 border-t border-white/10 dark:border-white/10">
+                <span className={`text-[10px] uppercase font-mono block mb-2.5 ${isDark ? 'text-zinc-500' : 'text-zinc-500'}`}>
+                  Profil Sosial & Developer:
+                </span>
+                <div className="flex items-center gap-2 flex-wrap">
+                  {activeSocials.map((item, idx) => {
+                    const details = getSocialPlatformDetails(item.platform);
+                    return (
+                      <a
+                        key={`${item.platform}-${idx}`}
+                        href={item.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{ '--btn-fill-bg': details.color } as React.CSSProperties}
+                        className={`btn-fill-effect p-2.5 rounded-lg border hover:text-white ${details.hoverBorder} transition-all ${
+                          isDark ? 'bg-white/5 border-white/10 text-zinc-300' : 'bg-zinc-100 border-zinc-200 text-zinc-700'
+                        }`}
+                        title={item.name}
+                      >
+                        <SocialPlatformIcon platform={item.platform} className="h-4 w-4" />
+                      </a>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
 

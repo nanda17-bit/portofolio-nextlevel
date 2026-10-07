@@ -93,10 +93,11 @@ const TypewriterTagline: React.FC<{ phrases: string[] }> = ({ phrases }) => {
   }, [displayText, isDeleting, phraseIdx, phrases]);
 
   return (
-    <div className="w-full flex items-center justify-center text-center">
-      <span className="inline-block text-xs sm:text-sm md:text-base font-normal text-zinc-300 font-poppins text-center">
-        {displayText}<span className="inline-block w-[2px] sm:w-[2.5px] h-[1.12em] ml-0.5 bg-amber-400 align-baseline animate-cursor-blink" />
-      </span>
+    <div className="w-full flex items-center justify-center text-center min-h-[1.8rem] sm:min-h-[2.2rem]">
+      <p className="text-[11px] xs:text-xs sm:text-sm md:text-base font-normal text-zinc-300 font-mono tracking-wider sm:tracking-widest uppercase text-center whitespace-nowrap inline-flex items-center justify-center drop-shadow-[0_2px_12px_rgba(0,0,0,0.8)] select-none">
+        <span>{displayText}</span>
+        <span className="inline-block w-[2px] sm:w-[2.5px] h-[1.15em] ml-1.5 bg-amber-400 align-middle animate-cursor-blink rounded-full shadow-[0_0_8px_rgba(245,158,11,0.9)]" />
+      </p>
     </div>
   );
 };
@@ -411,8 +412,9 @@ export const CurtainHero: React.FC<CurtainHeroProps> = ({ onScrollProgress }) =>
         {/* Hero Content - Placed BEHIND the curtain panels on desktop (z-10), clean static on mobile */}
         <div
           ref={contentRef}
-          className="relative z-10 flex min-h-[85vh] sm:min-h-screen md:h-full w-full flex-col items-center justify-center px-4 pt-20 pb-10 sm:pb-16 md:pt-14 md:pb-12 text-center text-white will-change-transform max-w-5xl mx-auto"
+          className="relative z-10 flex min-h-[85vh] sm:min-h-screen md:h-full w-full flex-col items-center justify-center px-4 pt-20 pb-12 sm:pb-16 md:pt-14 md:pb-12 text-center text-white will-change-transform max-w-5xl mx-auto"
         >
+
           {/* Main Headline - Montserrat Bold with hardware accelerated compositor */}
           <h1
             ref={titleRef}
@@ -439,10 +441,10 @@ export const CurtainHero: React.FC<CurtainHeroProps> = ({ onScrollProgress }) =>
             })()}
           </h1>
 
-          {/* Tagline with Center Typewriter Effect */}
+          {/* Tagline with Center Typewriter Effect - Clean text, wider single line, strictly centered */}
           <div
             ref={taglineRef}
-            className="mt-4 sm:mt-5 min-h-[3rem] sm:min-h-[2.5rem] w-full max-w-2xl mx-auto flex items-center justify-center text-center px-4 will-change-transform transition-all duration-200"
+            className="mt-3.5 sm:mt-5 w-full max-w-4xl mx-auto flex items-center justify-center text-center px-4 will-change-transform transition-all duration-200"
           >
             <TypewriterTagline phrases={phrases} />
           </div>

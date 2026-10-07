@@ -1,11 +1,11 @@
 {
   "hero": {
-    "badge": "SOFTWARE ENGINEER & FULL-STACK DEVELOPER",
+    "badge": "",
     "title": "baliqDev",
     "tagline": "CRAFTING ROBUST WEB SYSTEMS & SCALABLE DIGITAL PRODUCTS",
     "description": "Fokus pada pengembangan aplikasi web performa tinggi, sistem informasi terintegrasi, dan antarmuka modern yang bersih.",
-    "imageUrl": "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&w=2000&q=80",
-    "profileImageUrl": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80",
+    "imageUrl": "/images/hero-bg.jpg",
+    "profileImageUrl": "/profil.jpeg",
     "primaryBtnText": "Lihat Karya",
     "primaryBtnLink": "#projects",
     "secondaryBtnText": "Hubungi Saya",
@@ -29,7 +29,105 @@
       }
     ]
   },
-  "projects": [],
+  "projects": [
+    {
+      "id": "proj-1",
+      "title": "SKARIGA Academic & PPDB Portal",
+      "subtitle": "Sistem Informasi Akademik & Portal Pendaftaran",
+      "category": "Web Platform",
+      "description": "Portal manajemen akademik dan pendaftaran siswa baru terpadu dengan integrasi pembayaran otomatis dan manajemen data terpusat.",
+      "imageUrl": "/images/projects/project-1.jpg",
+      "tags": [
+        "Next.js",
+        "TypeScript",
+        "TailwindCSS",
+        "PostgreSQL"
+      ],
+      "demoUrl": "https://skarigajaya.web.id",
+      "githubUrl": "https://github.com/baliqdev/skariga-portal",
+      "featured": true,
+      "year": "2026",
+      "pinned": true
+    },
+    {
+      "id": "proj-2",
+      "title": "OmniPOS Multi-Outlet & Inventory",
+      "subtitle": "Point of Sale & Real-time Stock Manager",
+      "category": "Enterprise App",
+      "description": "Sistem kasir multi-cabang dengan sinkronisasi inventori otomatis, pencatatan transaksi offline-first, dan laporan analitik penjualan.",
+      "imageUrl": "/images/projects/project-2.jpg",
+      "tags": [
+        "React",
+        "Next.js",
+        "Node.js",
+        "PostgreSQL",
+        "Docker"
+      ],
+      "demoUrl": "https://omnipos-demo.dev",
+      "githubUrl": "https://github.com/baliqdev/omni-pos",
+      "featured": true,
+      "year": "2025",
+      "pinned": true
+    },
+    {
+      "id": "proj-3",
+      "title": "Logistika Fleet Telematics",
+      "subtitle": "Monitoring & Dispatch Management System",
+      "category": "Logistics Web",
+      "description": "Dashboard pelacakan armada kendaraan logistik dengan visualisasi rute real-time berbasis peta digital dan estimasi waktu kedatangan.",
+      "imageUrl": "/images/projects/project-3.jpg",
+      "tags": [
+        "TypeScript",
+        "Go",
+        "Next.js",
+        "WebSocket",
+        "PostgreSQL"
+      ],
+      "demoUrl": "https://logistika.dev",
+      "githubUrl": "https://github.com/baliqdev/logistika-fleet",
+      "featured": true,
+      "year": "2026",
+      "pinned": true
+    },
+    {
+      "id": "proj-4",
+      "title": "Finansia Cashflow & Budget Tracker",
+      "subtitle": "Personal & Business Wealth Manager",
+      "category": "Fintech App",
+      "description": "Aplikasi pencatat keuangan dan perencana anggaran bulanan dengan ringkasan visual grafik pengeluaran dan export laporan keuangan.",
+      "imageUrl": "/images/projects/project-4.jpg",
+      "tags": [
+        "Next.js",
+        "React",
+        "TailwindCSS",
+        "Redis"
+      ],
+      "demoUrl": "https://finansia-demo.dev",
+      "githubUrl": "https://github.com/baliqdev/finansia-tracker",
+      "featured": true,
+      "year": "2025",
+      "pinned": true
+    },
+    {
+      "id": "proj-5",
+      "title": "Minimalist CMS & Editorial Studio",
+      "subtitle": "Lightweight Publishing & Content System",
+      "category": "CMS & Publishing",
+      "description": "Sistem manajemen konten editorial cepat dan bersih dengan editor markdown terpadu, manajemen media, dan rendering statis berkecepatan tinggi.",
+      "imageUrl": "/images/projects/project-5.jpg",
+      "tags": [
+        "Next.js",
+        "React",
+        "TypeScript",
+        "TailwindCSS"
+      ],
+      "demoUrl": "https://studio-cms.dev",
+      "githubUrl": "https://github.com/baliqdev/minimal-cms",
+      "featured": true,
+      "year": "2025",
+      "pinned": true
+    }
+  ],
   "techStack": [
     {
       "id": "tech-1791207983877",
@@ -105,18 +203,42 @@
     }
   ],
   "contact": {
-    "email": "contact@baliq.dev",
-    "phone": "+62 812-3456-7890",
-    "location": "Malang & Jakarta, Indonesia",
+    "name": "Iqbal Isnanda (baliqDev)",
+    "email": "thebalx16@gmail.com",
+    "phone": "083895012357",
+    "whatsapp": "6283895012357",
+    "location": "Karanganyar, Jawa tengah",
+    "address": "Papahan Tasikmadu Karanganyar",
     "bio": "Software engineer yang berdedikasi membangun web application performan, bersih, dan handal. Terbuka untuk diskusi proyek dan kolaborasi pengembangan sistem.",
     "availability": "Tersedia untuk proyek baru",
     "socials": {
-      "github": "https://github.com/baliqdev",
-      "linkedin": "https://linkedin.com/in/baliqdev",
-      "instagram": "https://instagram.com/baliqdev",
-      "twitter": "https://x.com/baliqdev",
-      "telegram": "https://t.me/baliqdev"
-    }
+      "instagram": "https://instagram.com/superheroiqn",
+      "website": "https://baliq.dev",
+      "github": "https://github.com/nanda17-bit"
+    },
+    "socialLinks": [
+      {
+        "id": "soc-instagram",
+        "platform": "instagram",
+        "name": "Instagram",
+        "url": "https://instagram.com/superheroiqn",
+        "enabled": true
+      },
+      {
+        "id": "soc-website",
+        "platform": "website",
+        "name": "Website Pribadi",
+        "url": "https://baliq.dev",
+        "enabled": true
+      },
+      {
+        "id": "soc-github-1791344463581",
+        "platform": "github",
+        "name": "GitHub",
+        "url": "https://github.com/nanda17-bit",
+        "enabled": true
+      }
+    ]
   },
   "messages": [
     {

@@ -3,9 +3,35 @@
 import React from 'react';
 import { usePortfolio } from '@/context/PortfolioContext';
 import { ArrowUp } from 'lucide-react';
+import { SocialPlatformIcon, getSocialPlatformDetails } from '@/components/SocialIcons';
 
 export const Footer: React.FC = () => {
   const { data } = usePortfolio();
+
+  const activeSocials = React.useMemo(() => {
+    const contact = data?.contact;
+    if (Array.isArray(contact?.socialLinks) && contact.socialLinks.length > 0) {
+      return contact.socialLinks
+        .filter((item) => item.enabled !== false && item.url && item.url.trim() !== '')
+        .map((item) => ({
+          platform: item.platform,
+          name: item.name || item.platform,
+          url: item.url,
+        }));
+    }
+
+    if (contact?.socials && typeof contact.socials === 'object') {
+      return Object.entries(contact.socials)
+        .filter(([_, url]) => Boolean(url && typeof url === 'string' && url.trim() !== ''))
+        .map(([platform, url]) => ({
+          platform,
+          name: platform.charAt(0).toUpperCase() + platform.slice(1),
+          url: url as string,
+        }));
+    }
+
+    return [];
+  }, [data?.contact?.socialLinks, data?.contact?.socials]);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -35,6 +61,27 @@ export const Footer: React.FC = () => {
             © {new Date().getFullYear()}
           </span>
         </div>
+
+        {/* Dynamic Social Media Links */}
+        {activeSocials.length > 0 && (
+          <div className="flex items-center gap-3 text-zinc-400 flex-wrap justify-center">
+            {activeSocials.map((item, idx) => {
+              const details = getSocialPlatformDetails(item.platform);
+              return (
+                <a
+                  key={`${item.platform}-${idx}`}
+                  href={item.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`${details.textColor} transition-colors p-1 hover:scale-110 transition-transform`}
+                  title={item.name}
+                >
+                  <SocialPlatformIcon platform={item.platform} size={15} />
+                </a>
+              );
+            })}
+          </div>
+        )}
 
         <div className="flex items-center gap-6">
           <a href="/#projects" className="hover:text-zinc-300 transition-colors">

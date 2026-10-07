@@ -39,21 +39,39 @@ export interface TechStackItem {
   color?: string;
 }
 
+export interface SocialItem {
+  id: string;
+  platform: string;
+  name: string;
+  url: string;
+  enabled?: boolean;
+}
+
 export interface SocialLinks {
-  github: string;
-  linkedin: string;
-  instagram: string;
-  twitter: string;
+  github?: string;
+  linkedin?: string;
+  instagram?: string;
+  twitter?: string;
   telegram?: string;
+  whatsapp?: string;
+  youtube?: string;
+  tiktok?: string;
+  discord?: string;
+  website?: string;
+  [key: string]: string | undefined;
 }
 
 export interface ContactData {
+  name?: string;
   email: string;
   phone: string;
+  whatsapp?: string;
   location: string;
+  address?: string;
   bio: string;
-  availability: string;
-  socials: SocialLinks;
+  availability?: string;
+  socials?: SocialLinks;
+  socialLinks?: SocialItem[];
 }
 
 export interface ContactMessage {
